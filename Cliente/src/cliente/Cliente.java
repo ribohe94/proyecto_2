@@ -65,37 +65,37 @@ public class Cliente implements Runnable {
                     return;
                 }                                   
                 
-                if(mensaje.equals("primero")){
-                    numCliente = 1;
-                    ventanaCliente = new VentanaCliente(this, numCliente);
-                    return;
-                }
-                
-                if(mensaje.equals("segundo")){
-                    numCliente = 2;
-                    ventanaCliente = new VentanaCliente(this, numCliente);
-                    return;
-                }
-                
-                if(mensaje.equals("tercero")){
-                    numCliente = 3;
-                    ventanaCliente = new VentanaCliente(this, numCliente);
-                    return;
-                }
+//                if(mensaje.equals("primero")){
+//                    numCliente = 1;
+//                    ventanaCliente = new VentanaCliente(this, numCliente);
+//                    return;
+//                }
+//                
+//                if(mensaje.equals("segundo")){
+//                    numCliente = 2;
+//                    ventanaCliente = new VentanaCliente(this, numCliente);
+//                    return;
+//                }
+//                
+//                if(mensaje.equals("tercero")){
+//                    numCliente = 3;
+//                    ventanaCliente = new VentanaCliente(this, numCliente);
+//                    return;
+//                }
                 
                 try{ 
                     int numCliente = Integer.parseInt(mensaje.substring(0,1));     
                     System.out.println(mensaje);
                     switch(numCliente){
-                        case 1:
-                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
-                            break;
-                        case 2:                
-                            ventanaCliente.asignaCartaSegundo(Integer.parseInt(mensaje.substring(1)));
-                            break;
-                        case 3:
-                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
-                            break;
+//                        case 1:
+//                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
+//                            break;
+//                        case 2:                
+//                            ventanaCliente.asignaCartaSegundo(Integer.parseInt(mensaje.substring(1)));
+//                            break;
+//                        case 3:
+//                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
+//                            break;
                     }
                 }catch(Exception ex){
                     System.out.println("Usuario: " + mensaje);
@@ -116,7 +116,8 @@ public class Cliente implements Runnable {
    }        
     
     public int getNumeroCarta(){
-        return ventanaCliente.getNumeroCarta();
+        //return ventanaCliente.getNumeroCarta();
+        return 0; //quitar
     }
     
     public int getCantFichas(){
