@@ -1,20 +1,20 @@
 
 package vista;
 
-import cliente.Cliente;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class VentanaCliente extends JFrame{
-    public VentanaCliente(Cliente cliente, int numCliente){        
-        this.cliente = cliente;
+    public VentanaCliente(int numCliente){                
         this.numCliente = numCliente;
         
         ajustarConfiguracionInicial();
@@ -24,7 +24,7 @@ public class VentanaCliente extends JFrame{
     
     private void ajustarConfiguracionInicial(){
         setTitle("Jugador");        
-        setSize(455, 350);
+        setSize(571, 645);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -43,8 +43,9 @@ public class VentanaCliente extends JFrame{
         panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(btnPedirCarta);
         panelBotones.add(btnQuedarse);
-        panelBotones.add(btnApostar);
+        panelBotones.add(btnApostar);        
         
+        panelBotones.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         c.add(panelCarta, BorderLayout.CENTER);
         c.add(panelBotones, BorderLayout.SOUTH);
     }
@@ -53,7 +54,7 @@ public class VentanaCliente extends JFrame{
         btnPedirCarta.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                cliente.escribirMensajeServidor(panelCarta.lanzarCarta());
+                //cliente.escribirMensajeServidor(panelCarta.lanzarCarta());
                 btnPedirCarta.setEnabled(false);
             }            
         });
@@ -61,7 +62,7 @@ public class VentanaCliente extends JFrame{
         btnQuedarse.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                cliente.escribirMensajeServidor("quedarse");
+                //cliente.escribirMensajeServidor("quedarse");
                 btnQuedarse.setEnabled(false);
                 btnPedirCarta.setEnabled(false);
             }            
@@ -84,8 +85,8 @@ public class VentanaCliente extends JFrame{
                     return;
                 }
                                 
-                cliente.setCantFichas(cantFichas - fichas);
-                cliente.escribirMensajeServidor("rf" + fichas); //rf = Resta Fichas
+//                cliente.setCantFichas(cantFichas - fichas);
+//                cliente.escribirMensajeServidor("rf" + fichas); //rf = Resta Fichas
                 btnApostar.setEnabled(false);                
             }            
         });
@@ -100,9 +101,9 @@ public class VentanaCliente extends JFrame{
         setVisible(true);
     }
     
-    public int getNumeroCarta(){
-        return panelCarta.getNumeroCarta();
-    }
+//    public int getNumeroCarta(){
+//        return panelCarta.getNumeroCarta();
+//    }
     
     public int getCantFichas(){
         return cantFichas;
@@ -122,17 +123,17 @@ public class VentanaCliente extends JFrame{
         panelCarta.asignaUsuario(usuario);
     }    
     
-    public void asignaCartaPrimero(int numeroCarta){
-        panelCarta.asignaCartaPrimero(numeroCarta);
-    }
-    
-    public void asignaCartaSegundo(int numeroCarta){
-        panelCarta.asignaCartaSegundo(numeroCarta);
-    }
-    
-    public void asignaCartaTercero(int numeroCarta){
-        panelCarta.asignaCartaTercero(numeroCarta);
-    }
+//    public void asignaCartaPrimero(int numeroCarta){
+//        panelCarta.asignaCartaPrimero(numeroCarta);
+//    }
+//    
+//    public void asignaCartaSegundo(int numeroCarta){
+//        panelCarta.asignaCartaSegundo(numeroCarta);
+//    }
+//    
+//    public void asignaCartaTercero(int numeroCarta){
+//        panelCarta.asignaCartaTercero(numeroCarta);
+//    }
     
     //Atributos
     private JPanel panelBotones;
@@ -140,8 +141,7 @@ public class VentanaCliente extends JFrame{
     private JButton btnQuedarse;
     private JButton btnApostar;
     
-    private PanelCarta panelCarta;
-    private Cliente cliente;    
+    private PanelCarta panelCarta;    
     private int numCliente;
     private int cantFichas;
 }
