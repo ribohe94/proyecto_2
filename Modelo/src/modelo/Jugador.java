@@ -10,7 +10,7 @@ public class Jugador implements Serializable{
         this.nombreUsuario = nombreUsuario;
         this.pass = pass;
         fichas = 1000;
-        cartasMano = new ArrayList<>();
+        cartasMano = new ArrayList();
     }
 
     public String getNombreUsuario() {
@@ -19,6 +19,11 @@ public class Jugador implements Serializable{
 
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
+    }
+    
+    //Para Verificar coincidencia de password para jugadores previamente registrados
+    public String getPass(){
+        return pass;
     }
 
     public int getFichas(){
@@ -30,9 +35,9 @@ public class Jugador implements Serializable{
     }        
     
     //Agrega una carta a la mano
-    public boolean agregaCarta(int carta){
+    public boolean agregaCarta(Carta carta){
         cartasMano.add(carta);
-        return cartasMano() <= 21;
+        return sumaCartasActual() <= 21;
     }
     
     //Limpia la mano de cartas
@@ -41,11 +46,11 @@ public class Jugador implements Serializable{
     }
     
     //Devuelve la suma de todas las cartas en la mano
-    public int cartasMano(){
+    public int sumaCartasActual(){
         int numero = 0;
         
-        for(int i = 0; i < cartasMano.size(); i++){
-            numero += cartasMano.get(i);
+        for(Carta carta : cartasMano){
+            numero += carta.getNumero();
         }
         
         return numero;
@@ -60,5 +65,5 @@ public class Jugador implements Serializable{
     private String nombreUsuario;
     private String pass;
     private int fichas;
-    private ArrayList<Integer> cartasMano;
+    private ArrayList<Carta> cartasMano;
 }

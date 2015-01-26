@@ -69,7 +69,7 @@ public class Servidor {
             JOptionPane.showMessageDialog(null,"El mínimo de jugadores es 2");                        
             
             controlarRegistros(); 
-            datos.actualizar("ocultar");                        
+            datos.registrarCambios("ocultar");                        
             
             while (true){//Comienza una partida
                 if(cantClientes == 2){
@@ -87,7 +87,7 @@ public class Servidor {
                     cerrarServidor();
                     System.exit(0);
                 }                
-                datos.actualizar("reiniciar");
+                datos.registrarCambios("reiniciar");
             }
         } catch (Exception e) {            
             System.err.println(e.getMessage());
@@ -152,17 +152,17 @@ public class Servidor {
         clientes.get(0).escribirEntradaCliente("lanzar");
         carta1 = clientes.get(0).leerCartaCliente();
         System.out.println("Carta #1: " + carta1);
-        datos.actualizar(String.format("%d%d",1,carta1));        
+        datos.registrarCambios(String.format("%d%d",1,carta1));        
         
         clientes.get(1).escribirEntradaCliente("lanzar");
         carta2 = clientes.get(1).leerCartaCliente();
         System.out.println("Carta #2: " + carta2);
-        datos.actualizar(String.format("%d%d",2,carta2));
+        datos.registrarCambios(String.format("%d%d",2,carta2));
                 
         clientes.get(2).escribirEntradaCliente("lanzar");
         carta3 = clientes.get(2).leerCartaCliente();
         System.out.println("Carta #3: " + carta3);
-        datos.actualizar(String.format("%d%d",3,carta3));
+        datos.registrarCambios(String.format("%d%d",3,carta3));
         
         compararLanzamientos(carta1, carta2, carta3);
     }    

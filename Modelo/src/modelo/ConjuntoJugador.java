@@ -51,7 +51,7 @@ public class ConjuntoJugador {
         Jugador jugador = null;
         
         for (Jugador jugadore : jugadores) {
-            int a = jugadore.cartasMano();
+            int a = jugadore.sumaCartasActual();
             if (a < 22) {
                 if (a > cartaAlta) {
                     cartaAlta = a;                    

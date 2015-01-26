@@ -26,6 +26,11 @@ public class Carta implements Serializable{
         return tipo;
     }
     
+    // Este set solo tiene utilidad para el As
+    public void setNumero(int numero){
+        this.numero = numero;
+    }
+    
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();

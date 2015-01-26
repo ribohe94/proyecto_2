@@ -63,6 +63,5 @@ public class DireccionCarta {
     public final static String DIRECCION_Trecebastos = "/tarea/pkg8/img/Actions/king_of_spades.png";
     
     // Imagen de Atrás
-    public final static String DIRECCION_ATRAS = "/cliente/imagenes/Trasera.png";
-
+    public final static String DIRECCION_ATRAS = "/tarea/pkg8/img/Actions/red_joker.png";
 }
