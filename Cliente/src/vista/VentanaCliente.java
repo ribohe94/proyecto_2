@@ -24,7 +24,7 @@ public class VentanaCliente extends JFrame{
     
     private void ajustarConfiguracionInicial(){
         setTitle("Jugador");        
-        setSize(571, 645);
+        setSize(900, 700);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

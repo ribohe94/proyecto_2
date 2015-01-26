@@ -1,4 +1,3 @@
-
 package cliente;
 
 import java.io.IOException;
@@ -9,62 +8,62 @@ import protocolo.Protocolo;
 import vista.VentanaCliente;
 import vista.VentanaRegistro;
 
-public class Cliente implements Runnable {  
-    
-    public Cliente(VentanaRegistro ventanaRegistro){
-        this.ventanaRegistro = ventanaRegistro;                        
+public class Cliente implements Runnable {
+
+    public Cliente(VentanaRegistro ventanaRegistro) {
+        this.ventanaRegistro = ventanaRegistro;
     }
-    
+
     @Override
-    public void run() {        
-        while(true){
+    public void run() {
+        while (true) {
             leer();
             leer();
         }
     }
-    
-    public void iniciar(){
+
+    public void iniciar() {
         try {
-            skt = new Socket("localhost", Protocolo.PUERTO_POR_DEFECTO);            
+            skt = new Socket("localhost", Protocolo.PUERTO_POR_DEFECTO);
             entrada = new ObjectInputStream(skt.getInputStream());
             salida = new ObjectOutputStream(skt.getOutputStream());
-             
+
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
     }
 
-    private void leer(){
-         String mensaje = "";
-             try {
-                 mensaje = entrada.readObject().toString();
-                 
-                 if(mensaje.equals("salida")){
-                     System.exit(0);
-                 }
-                 
-                 if(mensaje.equals("ocultar")){
-                     esconderVentanaRegistro();
-                     return;
-                 }
-                 
-                 if(mensaje.equals("reiniciar")){
-                     reiniciar();
-                     return;
-                 }
-                 
-                 if(mensaje.equals("turno")){
-                     System.out.println("Mi turno");
-                    ventanaRegistro.habilitarBoton();
-                    return;
-                 }
-                 
-                if(mensaje.equals("lanzar")){
-                    ventanaCliente.iniciar();
-                    ventanaCliente.habilitarLanzar();   
-                    return;
-                }                                   
-                
+    private void leer() {
+        String mensaje = "";
+        try {
+            mensaje = entrada.readObject().toString();
+
+            if (mensaje.equals("salida")) {
+                System.exit(0);
+            }
+
+            if (mensaje.equals("ocultar")) {
+                esconderVentanaRegistro();
+                return;
+            }
+
+            if (mensaje.equals("reiniciar")) {
+                reiniciar();
+                return;
+            }
+
+            if (mensaje.equals("turno")) {
+                System.out.println("Mi turno");
+                ventanaRegistro.habilitarBoton();
+                return;
+            }
+
+            if (mensaje.equals("lanzar")) {
+                ventanaCliente.iniciar();
+                ventanaCliente.habilitarLanzar();
+                return;
+            }
+
 //                if(mensaje.equals("primero")){
 //                    numCliente = 1;
 //                    ventanaCliente = new VentanaCliente(this, numCliente);
@@ -82,11 +81,10 @@ public class Cliente implements Runnable {
 //                    ventanaCliente = new VentanaCliente(this, numCliente);
 //                    return;
 //                }
-                
-                try{ 
-                    int numCliente = Integer.parseInt(mensaje.substring(0,1));     
-                    System.out.println(mensaje);
-                    switch(numCliente){
+            try {
+                int numCliente = Integer.parseInt(mensaje.substring(0, 1));
+                System.out.println(mensaje);
+                switch (numCliente) {
 //                        case 1:
 //                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
 //                            break;
@@ -97,56 +95,55 @@ public class Cliente implements Runnable {
 //                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
 //                            break;
                     }
-                }catch(Exception ex){
-                    System.out.println("Usuario: " + mensaje);
-                    ventanaRegistro.mostrarMensaje(mensaje);        
-                }
+            } catch (Exception ex) {
+                System.out.println("Usuario: " + mensaje);
+                ventanaRegistro.mostrarMensaje(mensaje);
+            }
 
-             } catch (IOException | ClassNotFoundException ex) {
-                 
-             }       
+        } catch (IOException | ClassNotFoundException ex) {
+
+        }
     }
-    
-    public void escribirMensajeServidor(Object obj){        
-        try {          
-          salida.writeObject(obj);
+
+    public void escribirMensajeServidor(Object obj) {
+        try {
+            salida.writeObject(obj);
+        } catch (Exception ex) {
         }
-        catch (Exception ex){
-        }
-   }        
-    
-    public int getNumeroCarta(){
+    }
+
+    public int getNumeroCarta() {
         //return ventanaCliente.getNumeroCarta();
         return 0; //quitar
     }
-    
-    public int getCantFichas(){
-        return ventanaCliente.getCantFichas();        
-    }
-    
-    public void setCantFichas(int cantFichas){
-        ventanaCliente.setCantFichas(cantFichas);
-    }
-    
-    public void esconderVentanaRegistro(){
-        ventanaRegistro.setVisible(false);
-    }
-    
-    public void reiniciar(){
-        ventanaCliente.reiniciar();        
+
+    public int getCantFichas() {
+        return ventanaCliente.getCantFichas();
     }
 
-    public void cerrarCliente (){
-     try {
-         salida.close();
-         entrada.close();
-         skt.close();       
-     }catch (Exception ex){
-        System.err.println(ex.getMessage());
-     }
+    public void setCantFichas(int cantFichas) {
+        ventanaCliente.setCantFichas(cantFichas);
     }
-    
-    public void asignaUsuario(String usuario){
+
+    public void esconderVentanaRegistro() {
+        ventanaRegistro.setVisible(false);
+    }
+
+    public void reiniciar() {
+        ventanaCliente.reiniciar();
+    }
+
+    public void cerrarCliente() {
+        try {
+            salida.close();
+            entrada.close();
+            skt.close();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    public void asignaUsuario(String usuario) {
         ventanaCliente.asignaUsuario(usuario);
     }
 
@@ -157,5 +154,5 @@ public class Cliente implements Runnable {
     private Socket skt;
     private VentanaRegistro ventanaRegistro;
     private VentanaCliente ventanaCliente;
-    private int numCliente;    
+    private int numCliente;
 }
