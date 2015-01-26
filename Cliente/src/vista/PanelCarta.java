@@ -1,11 +1,12 @@
 package vista;
 
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -101,7 +102,7 @@ public class PanelCarta extends JPanel implements Runnable {
         arraySpades = new BufferedImage[13];
         listArray = new LinkedList<>();
 
-        //adjust List
+        //ajustamos List
         listArray.add(arrayClubs);
         listArray.add(arrayHearts);
         listArray.add(arrayDiamonds);
@@ -113,6 +114,7 @@ public class PanelCarta extends JPanel implements Runnable {
         }
 
         try {
+            imgBack = ImageIO.read(getClass().getResourceAsStream("/img/Actions/playing-card-back.png"));
 
             arrayClubs[0] = ImageIO.read(getClass().getResourceAsStream("/img/Actions/2_of_clubs.png"));
             arrayClubs[1] = ImageIO.read(getClass().getResourceAsStream("/img/Actions/3_of_clubs.png"));
@@ -173,6 +175,8 @@ public class PanelCarta extends JPanel implements Runnable {
             Logger.getLogger(PanelCarta.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        this.setLayout(new BorderLayout());
+
     }
 
     @Override
@@ -196,9 +200,7 @@ public class PanelCarta extends JPanel implements Runnable {
         g2d.setComposite(alpha);
 
         g2d.drawImage(fondo, 0, 0, this.getWidth(), this.getHeight(), null);
-        
-        
-        
+
     }
 
     @Override
@@ -206,11 +208,11 @@ public class PanelCarta extends JPanel implements Runnable {
         super.paint(g);
 
         //Dibuja "tableros" para todos
-        g.setColor(Color.RED);
-        g.drawRoundRect(132, 5, 300, 93, 5, 5);
-        g.drawRoundRect(132, 445, 300, 93, 5, 5);
-        g.drawRoundRect(5, 120, 93, 300, 5, 5);
-        g.drawRoundRect(466, 120, 93, 300, 5, 5);
+        g.setColor(new Color(151, 0, 0));
+        g.drawRoundRect(190, 10, 370, 170, 5, 5);
+        g.drawRoundRect(190, 510, 370, 170, 5, 5);
+        g.drawRoundRect(30, 160, 120, 410, 5, 5);
+        g.drawRoundRect(590, 160, 120, 410, 5, 5);
 
         //Dibuja las letras (rótulos)
         g.setFont(new Font(Font.SERIF, Font.ITALIC, 15));
@@ -235,31 +237,27 @@ public class PanelCarta extends JPanel implements Runnable {
 
         //Cartas Casa                   
         for (int i = 0; i < cartasCasa.length; i++) {
-            int posX = 136 + (i * 50);
-            g.drawImage(arrayClubs[i], posX, 7, this);
-//            g.drawString(cartasCasa[i], posX, 80);
+            int posX = 200 + (i * 50);
+            g.drawImage(imgBack, posX, 20, this);
         }
 
         //Cartas Cliente    
         for (int i = 0; i < cartasCliente.length; i++) {
-            int posX = 136 + (i * 50);
+            int posX = 200 + (i * 50);
             g.drawImage(arrayClubs[i], posX, 520, this);
-//            g.drawString(cartasCliente[i], posX, 520);
         }
 
         //Cartas Otro1
         g.setFont(new Font(Font.SERIF, Font.BOLD, 60));
         for (int i = 0; i < cartasOtro1.length; i++) {
             int posY = 172 + (i * 48);
-            g.drawImage(arrayClubs[i], 38, posY, this);
-//            g.drawString(cartasOtro1[i], 38, posY);
+            g.drawImage(imgBack, 38, posY, this);
         }
 
         //Cartas Otro2
         for (int i = 0; i < cartasOtro2.length; i++) {
             int posY = 172 + (i * 48);
-            g.drawImage(arrayClubs[i], 500, posY, this);
-//            g.drawString(cartasOtro2[i], 500, posY);
+            g.drawImage(imgBack, 600, posY, this);
         }
     }
 
@@ -399,6 +397,7 @@ public class PanelCarta extends JPanel implements Runnable {
     private BufferedImage[] arrayHearts;
     private BufferedImage[] arrayDiamonds;
     private BufferedImage[] arraySpades;
+    private Image imgBack;
 
     private BufferedImage fondo;
 }
