@@ -200,7 +200,6 @@ public class PanelCarta extends JPanel implements Runnable {
         g2d.setComposite(alpha);
 
         g2d.drawImage(fondo, 0, 0, this.getWidth(), this.getHeight(), null);
-
     }
 
     @Override
@@ -209,10 +208,10 @@ public class PanelCarta extends JPanel implements Runnable {
 
         //Dibuja "tableros" para todos
         g.setColor(new Color(151, 0, 0));
-        g.drawRoundRect(190, 10, 370, 170, 5, 5);
-        g.drawRoundRect(190, 510, 370, 170, 5, 5);
-        g.drawRoundRect(30, 160, 120, 410, 5, 5);
-        g.drawRoundRect(590, 160, 120, 410, 5, 5);
+        g.drawRoundRect(290, 40, 370, 170, 5, 5);
+        g.drawRoundRect(290, 510, 370, 170, 5, 5);
+        g.drawRoundRect(130, 160, 120, 410, 5, 5);
+        g.drawRoundRect(690, 160, 120, 410, 5, 5);
 
         //Dibuja las letras (rótulos)
         g.setFont(new Font(Font.SERIF, Font.ITALIC, 15));
@@ -222,14 +221,13 @@ public class PanelCarta extends JPanel implements Runnable {
         String otro1 = "Cartas del cliente #" + numeroClienteOtro1;
         String otro2 = "Cartas del cliente #" + numeroClienteOtro2;
 
-        g.drawString("Cartas de la casa", 222, 115);
-        g.drawString(cliente, 222, 438);
-        g.drawString(otro1, 101, 270);
-        g.drawString(otro2, 335, 270);
+        
+        g.drawString("Cartas de la casa", 420, 30);
+        g.drawString(cliente, 420, 705);
 
         g.setColor(Color.BLUE);
         g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-        g.drawString(fichas, 205, 415);
+        g.drawString(fichas, 420, 720);
 
         //Dibuja los numeros de las cartas
         g.setColor(Color.BLACK);
@@ -237,13 +235,13 @@ public class PanelCarta extends JPanel implements Runnable {
 
         //Cartas Casa                   
         for (int i = 0; i < cartasCasa.length; i++) {
-            int posX = 200 + (i * 50);
-            g.drawImage(imgBack, posX, 20, this);
+            int posX = 300 + (i * 50);
+            g.drawImage(imgBack, posX, 50, this);
         }
 
         //Cartas Cliente    
         for (int i = 0; i < cartasCliente.length; i++) {
-            int posX = 200 + (i * 50);
+            int posX = 300 + (i * 50);
             g.drawImage(arrayClubs[i], posX, 520, this);
         }
 
@@ -251,14 +249,27 @@ public class PanelCarta extends JPanel implements Runnable {
         g.setFont(new Font(Font.SERIF, Font.BOLD, 60));
         for (int i = 0; i < cartasOtro1.length; i++) {
             int posY = 172 + (i * 48);
-            g.drawImage(imgBack, 38, posY, this);
+            g.drawImage(imgBack, 138, posY, this);
         }
 
         //Cartas Otro2
         for (int i = 0; i < cartasOtro2.length; i++) {
             int posY = 172 + (i * 48);
-            g.drawImage(imgBack, 600, posY, this);
+            g.drawImage(imgBack, 700, posY, this);
         }
+        
+        Graphics2D g2d = (Graphics2D) g;
+
+//        AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
+//        g2d.setComposite(alpha);
+        
+        g2d.rotate(-Math.PI/2, 100, 100);
+        g2d.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
+        g2d.setColor(Color.BLACK);
+        
+        g2d.drawString(otro1, -200, 100);
+        g2d.rotate(-Math.PI, 100, 100);
+        g2d.drawString(otro2, 280, -640);
     }
 
 //    public int lanzarCarta(){      
