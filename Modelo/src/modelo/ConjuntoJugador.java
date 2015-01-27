@@ -4,10 +4,15 @@ package modelo;
 import java.util.ArrayList;
 
 public class ConjuntoJugador {
+    
+    //<editor-fold defaultstate="collapsed" desc=" Constructor">
 
     public ConjuntoJugador() {
         jugadores = new ArrayList<>();
     }
+    // </editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" Metodos">
     
     public void agregarJugador(Jugador nuevoJugador){
         jugadores.add(nuevoJugador);
@@ -43,26 +48,33 @@ public class ConjuntoJugador {
         for(Jugador jugador : jugadores){
             jugador.limpiaMano();
         }
-    }        
-    
-    //Busca y devuelve el jugador que tenga la mano más alta
-    public Jugador buscaCartaAlta(){        
-        int cartaAlta = 0;
-        Jugador jugador = null;
-        
-        for (Jugador jugadore : jugadores) {
-            int a = jugadore.sumaCartasActual();
-            if (a < 22) {
-                if (a > cartaAlta) {
-                    cartaAlta = a;                    
-                    jugador = jugadore;
-                }
-            }                        
-        }
-        
-        return jugador;
     }
     
-    //Atributos
-    private ArrayList<Jugador> jugadores;       
+    //Reduce la cantidad de fichas de un usuario
+    public boolean restaFichas(String usuario, int cantFichas){
+        Jugador jugador = recuperarJugador(usuario);
+        if(jugador != null){
+            jugador.setFichas(jugador.getFichas() - cantFichas);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    //Aumenta la cantidad de fichas de un usuario
+    public boolean aumentaFichas(String usuario, int cantFichas){
+        Jugador jugador = recuperarJugador(usuario);
+        if(jugador != null){
+            jugador.setFichas(jugador.getFichas() + cantFichas);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    // </editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" Atributos">
+    
+    private ArrayList<Jugador> jugadores;
+    // </editor-fold>
 }

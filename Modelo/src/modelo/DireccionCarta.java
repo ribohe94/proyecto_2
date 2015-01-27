@@ -1,6 +1,8 @@
 package modelo;
 
 public class DireccionCarta {
+    
+    //<editor-fold defaultstate="collapsed" desc=" Direcciones">
 
     // Corazones
     public final static String DIRECCION_Acorazones = "/tarea/pkg8/img/Actions/ace_of_hearts.png";
@@ -64,4 +66,6 @@ public class DireccionCarta {
     
     // Imagen de Atrás
     public final static String DIRECCION_ATRAS = "/tarea/pkg8/img/Actions/red_joker.png";
+    
+    // </editor-fold>
 }

@@ -6,17 +6,17 @@ import java.util.Random;
 
 public class Mazo {
 
-    // Constructor
+    //<editor-fold defaultstate="collapsed" desc=" Constructor">
     public Mazo() {
         atras = new Carta(DireccionCarta.DIRECCION_ATRAS, "Comodin", 0);
         mazo = new ArrayList();
         inicializarMazo();
-
     }
+    // </editor-fold>
 
-    // Metodos
+    //<editor-fold defaultstate="collapsed" desc=" Metodos">
     private void inicializarMazo() {
-        if(mazo.isEmpty() == false){
+        if (mazo.isEmpty() == false) {
             mazo.clear();
         }
         mazo.add(new Carta(DireccionCarta.DIRECCION_Acorazones, "Corazones", 1));
@@ -77,6 +77,10 @@ public class Mazo {
         barajear();
     }
 
+    public void reiniciarMazo() {
+        inicializarMazo();
+    }
+
     public int obtenerNumeroCarta(int posicion) {
         return mazo.get(posicion).getNumero();
     }
@@ -94,33 +98,35 @@ public class Mazo {
     }
 
     // Devuelve null si ya no hay cartas en el mazo
-    // Tambien elige el valor que debe tomas la carta si esta es un "As" 0 o 11
-     public Carta generarCarta(int sumaCartasActualJugador) {
+    // Tambien elige el valor que debe tomar la carta si esta es un "As" 0 o 11
+    public Carta generarCarta(int sumaCartasActual) {
         Carta cartaSeleccionada = null;
         if (mazo.size() > 0) {
-            cartaSeleccionada = mazo.get(mazo.size()-1);
-            mazo.remove(mazo.size()-1);
-            if(cartaSeleccionada.getNumero() == 1){
-                elegirValorDeAs(cartaSeleccionada, sumaCartasActualJugador);
+            cartaSeleccionada = mazo.get(mazo.size() - 1);
+            mazo.remove(mazo.size() - 1);
+            if (cartaSeleccionada.getNumero() == 1) {
+                elegirValorDeAs(cartaSeleccionada, sumaCartasActual);
             }
         }
         return cartaSeleccionada;
     }
-     
-     private void barajear(){
-         Collections.shuffle(mazo);
-     }
-     
-     private void elegirValorDeAs(Carta as, int sumaCartasActualJugador){
-         if(sumaCartasActualJugador < 11){
-             as.setNumero(11);
-         }
-     }
 
-    // Atributos
+    private void elegirValorDeAs(Carta as, int sumaCartasActual) {
+        if (sumaCartasActual < 11) {
+            as.setNumero(11);
+        }
+    }
+
+    private void barajear() {
+        Collections.shuffle(mazo);
+    }
+     // </editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Atributos">
     private ArrayList<Carta> mazo;
     private Carta atras;
 
     private Random rnd = new Random();
+    // </editor-fold>
 
 }
