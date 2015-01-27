@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JOptionPane;
@@ -39,7 +40,7 @@ public class VentanaCliente extends JFrame{
         btnQuedarse = new JButton("Quedarse");
         btnQuedarse.setEnabled(false);
         btnApostar = new JButton("Apostar");
-        btnApostar.setEnabled(false);        
+        btnApostar.setEnabled(true);        
         
         panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBotones.add(btnPedirCarta);
@@ -141,6 +142,7 @@ public class VentanaCliente extends JFrame{
     private JButton btnPedirCarta;
     private JButton btnQuedarse;
     private JButton btnApostar;
+    private JComboBox cmbApostar;
     
     private PanelCarta panelCarta;    
     private int numCliente;
