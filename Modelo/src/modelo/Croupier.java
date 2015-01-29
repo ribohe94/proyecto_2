@@ -21,28 +21,26 @@ public class Croupier {
     // Regla del BlackJack el croupier se puede plantar al tener 17 o más
     // Buscando, claramente, tener menos o igual que 21
     public boolean necesitoCarta(){
-        if(sumaCartasActualCasa() < 18){
-            return true;
-        }
-        return false;
+        return sumaCartasActualCasa() < 18;
     }
     
-    public String agregarCartaCasa() {
+    public Carta agregarCartaCasa() {
         Carta carta = mazo.generarCarta(sumaCartasActualCasa());
         manoServidor.add(carta);
-        return carta.getDIRECCION_CARTA();
+        
+        return carta;
     }
 
     public int sumaCartasActualCasa() {
-        int numero = 0;
+        int valor = 0;
 
         if (manoServidor.isEmpty() == false) {
             for (Carta carta : manoServidor) {
-                numero += carta.getNumero();
+                valor += carta.getValor();
             }
         }
 
-        return numero;
+        return valor;
     }
 
     //Compara manos entre el servidor (casa) y un usuario
@@ -83,37 +81,39 @@ public class Croupier {
 
     // Se reparten dos cartas al jugador para iniciar
     // Nota: se tiene que registrar el cambio en el Modelo
-    public String[] repartidaInicial(Jugador jugador) {
+    public Carta[] repartidaInicial(Jugador jugador) {
         Carta carta1 = mazo.generarCarta(jugador.sumaCartasActual());
         Carta carta2 = mazo.generarCarta(jugador.sumaCartasActual());
+        
         jugador.agregaCarta(carta1);
         jugador.agregaCarta(carta2);
-        String[] rutas = new String[2];
-        rutas[0] = carta1.getDIRECCION_CARTA();
-        rutas[1] = carta2.getDIRECCION_CARTA();
+        Carta[] cartas = new Carta[2];
+        cartas[0] = carta1;
+        cartas[1] = carta2;
         
-        return rutas;
+        return cartas;
     }
 
     // El croupier toma dos cartas para iniciar
     // Nota: se tiene que registrar el cambio en el Modelo
-    public String[] adiquisicionInicial() {
-        String carta1 = agregarCartaCasa();
-        String carta2 = agregarCartaCasa();
-        String[] rutas = new String[2];
-        rutas[0] = carta1;
-        rutas[1] = carta2;
+    public Carta[] adiquisicionInicial() {
+        Carta carta1 = agregarCartaCasa();
+        Carta carta2 = agregarCartaCasa();
         
-        return rutas;
+        Carta[] cartas = new Carta[2];
+        cartas[0] = carta1;
+        cartas[1] = carta2;
+        
+        return cartas;
     }
     
     // Le da una carta al jugador si este la solicita
     // devuelve true si la suma de total de cartas del jugador, despues de la obtencion
     // de la nueva carta, es menor o igual a 21. Retorna false en caso contrario
-    public String darCarta(Jugador jugador){
+    public Carta darCarta(Jugador jugador){
         Carta carta = mazo.generarCarta(jugador.sumaCartasActual());
         jugador.agregaCarta(carta);
-        return carta.getDIRECCION_CARTA();
+        return carta;
     }
     
     // Se inicializa el mazo del jugador para una nueva Partida

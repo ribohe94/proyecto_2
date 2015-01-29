@@ -27,24 +27,24 @@ public class Modelo extends Observable {
     }
     
     // El croupier hace la su adquisicion inicial. Osea obtiene dos cartas del mazo
-    // Este metodo devuelve un vector de String donde vendran las dos rutas de las dos
+    // Este metodo devuelve un vector de Cartas donde vendran las dos 
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
-    public String[] repartirCroupier(){
-        String[] rutas = croupier.adiquisicionInicial();
-        registrarCambios(croupier);
+    public Carta[] repartirCroupier(){
+        Carta[] cartas = croupier.adiquisicionInicial();
+        registrarCambios(2);        //Informa a los clientes la cantidad de cartas que tomó el croupier
         registrarCambios("El croupier ha tomado sus primeras dos cartas...");
-        return rutas;
+        return cartas;
     }
     
     // El croupier hace la adquisicion de una carta. 
     // PERO SOLO EN EL ESTRICTO CASO QUE LA NECESITE
-    // Este metodo devuelve un String que sera la ruta de la
+    // Este metodo devuelve la que sera la
     // carta para darsela a cliente y este poder pintarla en la vista
-    private String agregarCartaCroupier(){
-        String ruta = croupier.agregarCartaCasa();
+    private Carta agregarCartaCroupier(){
+        Carta carta = croupier.agregarCartaCasa();
         registrarCambios(croupier);
         registrarCambios("Carta agregada al Croupier...");
-        return ruta;
+        return carta;
     }
     
     // Implementación del metodo agregarCartaCroupier() de esta clase
@@ -53,45 +53,47 @@ public class Modelo extends Observable {
     // con el metodo equals(), algo asi: if(entrada.equals("NO")) entonces 
     // no hay ninguna ruta, de lo contrario si la hay y se dibujara en la vista
     // la nueva carta adquirida por el croupier
-    public String crupierNecesitaCarta(){
-        String ruta = "NO";
+    public Object crupierNecesitaCarta(){
+        String ruta = "NO";        
         if(croupier.necesitoCarta() == true){
-            ruta = agregarCartaCroupier();
-        }
-        return ruta;
+            Carta carta = agregarCartaCroupier();
+            return carta;
+        }else{
+            return ruta;   
+        }        
     }
     
     // El croupier hace la repartida inicial. Osea darle dos cartas al jugador
-    // Este metodo devuelve un vector de String donde vendran las dos rutas de las dos
+    // Este metodo devuelve un vector de Cartas donde vendran las dos
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
-    public String[] repartidaInicial(int pos){
+    public Carta[] repartidaInicial(int pos){
         Jugador jugador = jugadores.recuperarJugador(pos);
-        String[] rutas = croupier.repartidaInicial(jugador);
-        registrarCambios(jugador);
+        Carta[] cartas = croupier.repartidaInicial(jugador);
+        //registrarCambios(jugador);
         registrarCambios("Cartas iniciales reapartidas a : "+ jugador.getNombreUsuario()+"...");
-        return rutas;
+        return cartas;
     }
 
     // Casa entrega carta al jugador, ya que éste la debio de pedir
     // Nota : se obtiene el jugador por posicion
     // Devuelve direccion de carta para darsela a cliente y este poder pintarla en la vista
-    public String entregaCarta(int pos) {
+    public Carta entregaCarta(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
-        String direccionCarta = croupier.darCarta(jugador);
-        registrarCambios(jugador);
+        Carta carta = croupier.darCarta(jugador);
+        //registrarCambios(jugador);
         registrarCambios("Carta entregada a : " + jugador.getNombreUsuario() + "...");
-        return direccionCarta;
+        return carta;
     }
     
     // Casa entrega carta al jugador, ya que éste la debio de pedir
     // Nota : se obtiene el jugador por nombre
     // Devuelve direccion de carta agregada para pintarla en la vista
-    public String entregaCarta(String usuario) {
+    public Carta entregaCarta(String usuario) {
         Jugador jugador = jugadores.recuperarJugador(usuario);
-        String direccionCarta = croupier.darCarta(jugador);
+        Carta carta = croupier.darCarta(jugador);
         registrarCambios(jugador.getCartasMano());
         registrarCambios("Carta entregada a : " + jugador.getNombreUsuario() + "...");
-        return direccionCarta;
+        return carta;
     }
 
     // Limpia la mano de un jugador

@@ -99,12 +99,14 @@ public class VentanaRegistro extends JFrame{
                 }
                 
                 Jugador j = new Jugador(nom, pass);
+                cliente.setJugador(j);                              
+                //cliente.asignaUsuario(nom);
                 cliente.escribirMensajeServidor(j);
+                
                 txtNomUsuario.setText("");
                 txtPass.setText("");
                 btnRegistrar.setEnabled(false);           
-                mostrarMensaje("Usuario: " + nom);     
-                cliente.asignaUsuario(nom);
+                mostrarMensaje("Usuario: " + nom);                     
             }            
         });
         

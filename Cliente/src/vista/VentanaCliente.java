@@ -1,5 +1,6 @@
 package vista;
 
+import cliente.Cliente;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,13 +15,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import modelo.Carta;
 
 public class VentanaCliente extends JFrame {
 
-    public VentanaCliente() {
+    public VentanaCliente(Cliente cliente) {
+        this.cliente = cliente;
         ajustarConfiguracionInicial();
         ajustarComponentes(getContentPane());
         ajustarEventos();
@@ -28,7 +30,7 @@ public class VentanaCliente extends JFrame {
 
     private void ajustarConfiguracionInicial() {
         setTitle("Jugador");
-        setSize(700, 700);
+        setSize(700, 670);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);        
@@ -87,7 +89,6 @@ public class VentanaCliente extends JFrame {
     private void ajustarEventos() {
 
         btnBajarApuesta.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Integer.parseInt(txtaApuestas.getText()) != 0) {
@@ -97,7 +98,6 @@ public class VentanaCliente extends JFrame {
         });
 
         btnSubirApuesta.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(Integer.parseInt(txtaApuestas.getText()) < cantFichas)
@@ -108,7 +108,7 @@ public class VentanaCliente extends JFrame {
         btnPedirCarta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //cliente.escribirMensajeServidor(panelCarta.lanzarCarta());
+                cliente.escribirMensajeServidor("carta");
                 btnPedirCarta.setEnabled(false);
             }
         });
@@ -116,7 +116,7 @@ public class VentanaCliente extends JFrame {
         btnQuedarse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //cliente.escribirMensajeServidor("quedarse");
+                cliente.escribirMensajeServidor("quedarse");
                 btnQuedarse.setEnabled(false);
                 btnPedirCarta.setEnabled(false);
             }
@@ -124,31 +124,12 @@ public class VentanaCliente extends JFrame {
 
         btnApostar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                
+            public void actionPerformed(ActionEvent e) {                
                 lbCantFichas.setText("Fichas: " + (cantFichas - (Integer.parseInt(txtaApuestas.getText()))));
                 cantFichas = cantFichas - (Integer.parseInt(txtaApuestas.getText()));
                 lbFichasApostadas.setText("Fichas Apostadas: " + (cantFichasApostadas + (Integer.parseInt(txtaApuestas.getText()))));
                 cantFichasApostadas = cantFichasApostadas + (Integer.parseInt(txtaApuestas.getText()));
-                txtaApuestas.setText("0");
-                
-//                int fichas;
-//                String str = JOptionPane.showInputDialog(null, "Ingrese la cantidad de fichas que desea apostar.");
-//                try {
-//                    fichas = Integer.parseInt(str);
-//                } catch (NumberFormatException ex) {
-//                    JOptionPane.showMessageDialog(null, "Error al ingresar la cantidad de fichas, inténtelo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
-//
-//                if (fichas > cantFichas) {
-//                    JOptionPane.showMessageDialog(null, "Usted no dispone de tantas fichas, inténtelo de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
-//
-////                cliente.setCantFichas(cantFichas - fichas);
-////                cliente.escribirMensajeServidor("rf" + fichas); //rf = Resta Fichas
-//                btnApostar.setEnabled(false);
+                txtaApuestas.setText("0");            
             }
         });
     }
@@ -162,38 +143,39 @@ public class VentanaCliente extends JFrame {
         setVisible(true);
     }
 
-//    public int getNumeroCarta(){
-//        return panelCarta.getNumeroCarta();
-//    }
     public int getCantFichas() {
         return cantFichas;
     }
 
-    public void setCantFichas(int cantFichas) {
+    public void asignaCantFichas(int cantFichas) {
         this.cantFichas = cantFichas;
         panelCarta.setCantFichas(cantFichas);
     }
+    
+    public void agregarCartaUsuario(Carta carta){
+        panelCarta.agregarCartaUsuario(carta.getTipo(), carta.getValor());
+    }
+    
+    public void agregaCartaCroupier(int cant){
+        setCantCartasCroupier(getCantCartasCroupier() + cant);
+    }
+    
+    public void setCantCartasCroupier(int cant){
+        panelCarta.setCantCartasCroupier(cant);
+    }
+    
+    public int getCantCartasCroupier(){
+        return panelCarta.getCantCartasCroupier();
+    }
 
     public void reiniciar() {
-        panelCarta.reiniciar();
-        cantFichas = 1000;
+        panelCarta.reiniciar();        
     }
 
     public void asignaUsuario(String usuario) {
         panelCarta.asignaUsuario(usuario);
     }
 
-//    public void asignaCartaPrimero(int numeroCarta){
-//        panelCarta.asignaCartaPrimero(numeroCarta);
-//    }
-//    
-//    public void asignaCartaSegundo(int numeroCarta){
-//        panelCarta.asignaCartaSegundo(numeroCarta);
-//    }
-//    
-//    public void asignaCartaTercero(int numeroCarta){
-//        panelCarta.asignaCartaTercero(numeroCarta);
-//    }
     //Atributos
     /*Panel*/
     private JPanel panelBotones;
@@ -207,10 +189,9 @@ public class VentanaCliente extends JFrame {
     private JTextArea txtaApuestas;
     /*Labels*/
     private JLabel lbCantFichas;
-    private JLabel lbFichasApostadas;
-    /*CMB*/
-    private JComboBox cmbApostar;
+    private JLabel lbFichasApostadas;   
 
+    private Cliente cliente;
     private PanelCarta panelCarta;
     private int cantFichas;
     private int cantFichasApostadas;

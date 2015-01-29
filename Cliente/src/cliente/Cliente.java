@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import modelo.Carta;
+import modelo.Jugador;
 import protocolo.Protocolo;
 import vista.VentanaCliente;
 import vista.VentanaRegistro;
@@ -12,7 +14,7 @@ public class Cliente implements Runnable {
 
     public Cliente(VentanaRegistro ventanaRegistro) {
         this.ventanaRegistro = ventanaRegistro;
-        ventanaCliente = new VentanaCliente();
+        ventanaCliente = new VentanaCliente(this);
     }
 
     @Override
@@ -34,10 +36,23 @@ public class Cliente implements Runnable {
     }
 
     private void leer() {
-        String mensaje = "";
-        try {
-            mensaje = entrada.readObject().toString();            
-            System.out.println(mensaje);
+        try {            
+            Object objeto = entrada.readObject(); 
+            
+            if(objeto instanceof Carta){
+                ventanaCliente.agregarCartaUsuario((Carta)objeto);
+                return;
+            }        
+        
+            String mensaje = objeto.toString();
+            
+            try{
+                int cantCartasCroupier = Integer.parseInt(mensaje);
+                ventanaCliente.agregaCartaCroupier(cantCartasCroupier);
+                return;
+            }catch(NumberFormatException ex){
+                
+            }            
             
             if (mensaje.equals("salida")) {
                 System.exit(0);
@@ -64,47 +79,12 @@ public class Cliente implements Runnable {
                 ventanaCliente.iniciar();
                 ventanaCliente.habilitarLanzar();
                 return;
-            }
+            }                        
 
-//                if(mensaje.equals("primero")){
-//                    numCliente = 1;
-//                    ventanaCliente = new VentanaCliente(this, numCliente);
-//                    return;
-//                }
-//                
-//                if(mensaje.equals("segundo")){
-//                    numCliente = 2;
-//                    ventanaCliente = new VentanaCliente(this, numCliente);
-//                    return;
-//                }
-//                
-//                if(mensaje.equals("tercero")){
-//                    numCliente = 3;
-//                    venta try {
-//                int numCliente = Integer.parseInt(mensaje.substring(0, 1));
-//                System.out.println(mensaje);
-//                switch (numCliente) {
-////                        case 1:
-////                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
-////                            break;
-////                        case 2:                
-////                            ventanaCliente.asignaCartaSegundo(Integer.parseInt(mensaje.substring(1)));
-////                            break;
-////                        case 3:
-////                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
-////                            break;
-//                    }
-//            } catch (Exception ex) {
-//                
-//            }naCliente = new VentanaCliente(this, numCliente);
-//                    return;
-//                }
-//          
+            //Quitar esto
             if(!mensaje.isEmpty()){
                 System.out.println("Mensaje perdido: " + mensaje);                
-            }
-            
-
+            }            
         } catch (IOException | ClassNotFoundException ex) {
 
         }
@@ -117,9 +97,14 @@ public class Cliente implements Runnable {
         }
     }
 
-    public int getNumeroCarta() {
-        //return ventanaCliente.getNumeroCarta();
-        return 0; //quitar
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+        ventanaCliente.asignaUsuario(jugador.getNombreUsuario());
+        ventanaCliente.asignaCantFichas(jugador.getFichas());
     }
 
     public int getCantFichas() {
@@ -127,11 +112,10 @@ public class Cliente implements Runnable {
     }
 
     public void setCantFichas(int cantFichas) {
-        ventanaCliente.setCantFichas(cantFichas);
+        ventanaCliente.asignaCantFichas(cantFichas);
     }
 
-    public void esconderVentanaRegistro() {
-        //ventanaRegistro.setVisible(false);
+    public void esconderVentanaRegistro() {        
         ventanaRegistro.ocultarRegistro();
     }
 
@@ -149,10 +133,6 @@ public class Cliente implements Runnable {
         }
     }
 
-    public void asignaUsuario(String usuario) {
-        ventanaCliente.asignaUsuario(usuario);
-    }
-
     //Atributos
     private ObjectInputStream entrada;
     private ObjectOutputStream salida;
@@ -161,4 +141,5 @@ public class Cliente implements Runnable {
     private VentanaRegistro ventanaRegistro;
     private VentanaCliente ventanaCliente;
     private int numCliente;
+    private Jugador jugador;
 }

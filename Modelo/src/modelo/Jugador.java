@@ -76,15 +76,15 @@ public class Jugador implements Serializable {
 
     //Devuelve la suma de todas las cartas en la mano
     public int sumaCartasActual() {
-        int numero = 0;
+        int valor = 0;
 
         if (cartasMano.isEmpty() == false) {
             for (Carta carta : cartasMano) {
-                numero += carta.getNumero();
+                valor += carta.getValor();
             }
         }
 
-        return numero;
+        return valor;
     }
 
     @Override

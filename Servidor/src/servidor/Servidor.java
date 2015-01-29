@@ -1,6 +1,7 @@
 
 package servidor;
 
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -54,7 +55,7 @@ public class Servidor {
             
             while (true){//Comienza una partida
                 if(cantClientes == 2){
-                    System.out.println("Esperando a un posible tercer jugador...(5 segs)");
+                    System.out.println("Esperando a un posible tercer jugador...(3 segs)");
                     tercerRegistro();                    
                 }
                 
@@ -71,7 +72,7 @@ public class Servidor {
                 }                
                 datos.registrarCambios("reiniciar");
             }
-        } catch (Exception e) {            
+        } catch (IOException | HeadlessException e) {            
             System.err.println(e.getMessage());
         }
     }
@@ -104,7 +105,7 @@ public class Servidor {
     
     private void tercerRegistro() throws IOException{   //Acepta a algún otro cliente que está solicitando ingresar
         try {
-            srv.setSoTimeout(5000);
+            srv.setSoTimeout(3000);
             Socket skt = srv.accept();                        
             cantClientes++;
                     
@@ -120,9 +121,9 @@ public class Servidor {
                
             Jugador j = null;
         
-            clientes.get(2).escribirEntradaCliente("registro");                  
+            clientes.get(2).escribirMensajeCliente("registro");                  
             j = clientes.get(2).leerEntradaCliente();
-            clientes.get(2).escribirEntradaCliente(j.getNombreUsuario());      
+            clientes.get(2).escribirMensajeCliente(j.getNombreUsuario());      
             datos.agregarJugador(j);
             System.out.println(j);   
             
@@ -135,7 +136,7 @@ public class Servidor {
     public void controlarRegistros(){
         Jugador j;
         for(GestorCliente cliente: clientes){
-            cliente.escribirEntradaCliente("registro");                 
+            cliente.escribirMensajeCliente("registro");                 
             j = cliente.leerEntradaCliente();
             //cliente.escribirEntradaCliente(j.getNombreUsuario());      
             datos.agregarJugador(j);
@@ -144,37 +145,26 @@ public class Servidor {
     }
     
     public void reparteCartas(){
-        datos.repartirCroupier();     //El croupier obtiene dos cartas del mazo
-        datos.registrarCambios("turno");
+        datos.repartirCroupier();     //El croupier obtiene dos cartas del mazo        
         
-         //Se le dan 2 cartas a cada jugador y se le envían las rutas a sus clientes para que las dibujen
-        for(int i = 0;i < cantClientes; i++){            
+         //Se le dan 2 cartas a cada jugador y se le envían las cartas a sus clientes para que las dibujen
+        for(int i = 0; i < cantClientes; i++){            
             clientes.get(i).dibujarCartas(datos.repartidaInicial(i));             
         }
         
+        datos.registrarCambios("turno");
             //NOTA: HAY QUE ENVIARLE LAS RUTAS DE LAS CARTAS DEL CROUPIER A CADA CLIENTE
             //PARA QUE ÉSTE LAS DIBUJE??
     }
     
-//    public void reparteCartas(Jugador jugador){
-//        cartasMano.add(mazo.generarCarta(jugador.sumaCartasActual()));
-//        
-//        for(int i = 0; i < cantClientes; i++){
-//            datos.entregaCarta(i, mazo.generarCarta(jugador.sumaCartasActual()));
-//        }   
-//        
-//        cartasMano.add(mazo.generarCarta(jugador.sumaCartasActual()));
-//        
-//        for(int i = 0; i < cantClientes; i++){
-//            datos.entregaCarta(i, mazo.generarCarta(jugador.sumaCartasActual()));
-//        }  
-//    }
-    
     public void controlarTurnos(){                
-        for(int i = 0;i < cantClientes; i++){
-            clientes.get(i).escribirEntradaCliente("turno");            
+        for(int i = 0;i < cantClientes; i++){                                             
             while(!datos.devuelveJugador(i).getListo()){
                 //Espera a que el jugador se "plante"
+                if(clientes.get(i).leerMensajeCliente().equals("carta")){
+                    clientes.get(i).escribirMensajeCliente(datos.entregaCarta(i));
+                    
+                }
             }
             datos.comparaManos(i);                
         }        

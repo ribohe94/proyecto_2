@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import modelo.Carta;
 
 import modelo.Jugador;
 
@@ -31,21 +32,21 @@ public class GestorCliente implements Observer, Runnable {
 
     @Override
     public void update(Observable m, Object evt) {        
-        escribirEntradaCliente(evt);        
+        escribirMensajeCliente(evt);        
     }
     
     @Override
     public void run() {    
     
-    }
+    }        
     
-    public void dibujarCartas(String[] rutas){
-        for(int i = 0; i < rutas.length; i++){
-            escribirEntradaCliente("ruta" + rutas[i]);
+    public void dibujarCartas(Carta[] cartas){
+        for (Carta carta : cartas) {
+            escribirMensajeCliente(carta);
         }
     }
     
-    public void escribirEntradaCliente(Object e){
+    public void escribirMensajeCliente(Object e){
         try {
           salida.writeObject(e);          
         }
@@ -54,16 +55,27 @@ public class GestorCliente implements Observer, Runnable {
         }        
     }
     
+    public String leerMensajeCliente(){
+        String mensaje = "";
+        
+        try {
+            mensaje = entrada.readObject().toString();                        
+        } catch (ClassNotFoundException | IOException ex) {
+            System.err.println(ex.getMessage());        
+        }
+        
+        return mensaje;
+    }
+    
     public Jugador leerEntradaCliente(){
         Jugador j = null;
+        
         try {
               j =  (Jugador)entrada.readObject();                        
-        } catch (ClassNotFoundException ex) {
-                    
-                } 
-        catch (IOException ex) {            
-            System.err.println(ex.getMessage());
+        } catch (ClassNotFoundException | IOException ex) {
+            System.err.println(ex.getMessage());        
         }
+        
         return j;
     } 
 
@@ -73,7 +85,7 @@ public class GestorCliente implements Observer, Runnable {
     
     public void cerrarGestorCliente (){
      try {
-         escribirEntradaCliente("salida");
+         escribirMensajeCliente("salida");
          salida.close();
          entrada.close();
          socket.close();         
