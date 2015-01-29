@@ -17,15 +17,19 @@ public class Modelo extends Observable {
 
     // Agregando un nuevo Jugador
     public void agregarJugador(Jugador nuevoJugador) {
-        jugadores.agregarJugador(nuevoJugador);
-        registrarCambios(nuevoJugador);
+        jugadores.agregarJugador(nuevoJugador);        
         registrarCambios("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
+    }
+    
+    //Devuelve un jugador en específico
+    public Jugador devuelveJugador(int p){
+        return jugadores.recuperarJugador(p);
     }
     
     // El croupier hace la su adquisicion inicial. Osea obtiene dos cartas del mazo
     // Este metodo devuelve un vector de String donde vendran las dos rutas de las dos
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
-    public String[] adquisicionInicial(){
+    public String[] repartirCroupier(){
         String[] rutas = croupier.adiquisicionInicial();
         registrarCambios(croupier);
         registrarCambios("El croupier ha tomado sus primeras dos cartas...");

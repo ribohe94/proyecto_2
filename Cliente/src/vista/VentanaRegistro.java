@@ -101,7 +101,10 @@ public class VentanaRegistro extends JFrame{
                 Jugador j = new Jugador(nom, pass);
                 cliente.escribirMensajeServidor(j);
                 txtNomUsuario.setText("");
-                btnRegistrar.setEnabled(false);                                
+                txtPass.setText("");
+                btnRegistrar.setEnabled(false);           
+                mostrarMensaje("Usuario: " + nom);     
+                cliente.asignaUsuario(nom);
             }            
         });
         
@@ -125,18 +128,21 @@ public class VentanaRegistro extends JFrame{
     }
     
     public void mostrarMensaje(String m){        
-        lbEstado.setText("Usuario: " + m);
-        cliente.asignaUsuario(m);
+        lbEstado.setText(m);        
     }
     
     public Cliente obtenerCliente(){
         return cliente;
     }    
     
+    public void ocultarRegistro(){
+        setVisible(false);        
+    }
+    
     private void conectarse(){           
            cliente = new Cliente(this);
            cliente.iniciar();
-           hiloCliente= new Thread( cliente);
+           hiloCliente= new Thread( cliente);           
            hiloCliente.start();
     }
            

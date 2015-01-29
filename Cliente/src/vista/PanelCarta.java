@@ -19,28 +19,12 @@ import javax.swing.JPanel;
 
 public class PanelCarta extends JPanel implements Runnable {
 
-    public PanelCarta(int numeroCliente) {
-        ajustarComponentes();
-        this.numeroCliente = numeroCliente;
-        switch (numeroCliente) {
-            case 1:
-                numeroClienteOtro1 = 2;
-                numeroClienteOtro2 = 3;
-                break;
-            case 2:
-                numeroClienteOtro1 = 3;
-                numeroClienteOtro2 = 1;
-                break;
-            case 3:
-                numeroClienteOtro1 = 1;
-                numeroClienteOtro2 = 2;
-                break;
-        }
+    public PanelCarta() {
+        ajustarComponentes();        
 
         cartasCasa = new String[6];
         cartasCliente = new String[6];
-        cartasOtro1 = new String[6];
-        cartasOtro2 = new String[6];
+
 
         for (int i = 0; i < cartasCasa.length; i++) {
             cartasCasa[i] = "";
@@ -50,13 +34,6 @@ public class PanelCarta extends JPanel implements Runnable {
             cartasCliente[i] = "";
         }
 
-        for (int i = 0; i < cartasOtro1.length; i++) {
-            cartasOtro1[i] = "";
-        }
-
-        for (int i = 0; i < cartasOtro2.length; i++) {
-            cartasOtro2[i] = "";
-        }
 
         //
         cartasCasa[0] = "?";
@@ -68,30 +45,10 @@ public class PanelCarta extends JPanel implements Runnable {
         cartasCliente[3] = "" + 4;
         cartasCliente[4] = "" + 5;
         cartasCliente[5] = "" + 6;
-
-        cartasOtro1[0] = "" + 1;
-        cartasOtro1[1] = "" + 2;
-        cartasOtro1[2] = "" + 3;
-        cartasOtro1[3] = "" + 4;
-        cartasOtro1[4] = "" + 5;
-        cartasOtro1[5] = "" + 6;
-
-        cartasOtro2[0] = "" + 1;
-        cartasOtro2[1] = "" + 2;
-        cartasOtro2[2] = "" + 3;
-        cartasOtro2[3] = "" + 4;
-//        cartasOtro2[4] = 5;
-//        cartasOtro2[5] = 6;
-
-        //        
+     
         rnd = new Random();
         usuario = "Prueba";
-
-//        try {            
-//            fondo = ImageIO.read(getClass().getResourceAsStream("/pruebas/imagenes/2.png"));
-//        } catch (IOException ex) {
-//            System.out.println("No se pudo cargar el fondo...");
-//        }               
+        
     }
 
     private void ajustarComponentes() {
@@ -208,26 +165,21 @@ public class PanelCarta extends JPanel implements Runnable {
 
         //Dibuja "tableros" para todos
         g.setColor(new Color(151, 0, 0));
-        g.drawRoundRect(290, 40, 370, 170, 5, 5);
-        g.drawRoundRect(290, 510, 370, 170, 5, 5);
-        g.drawRoundRect(130, 160, 120, 410, 5, 5);
-        g.drawRoundRect(690, 160, 120, 410, 5, 5);
+        g.drawRoundRect(155, 40, 370, 170, 5, 5);
+        g.drawRoundRect(155, 410, 370, 170, 5, 5);
 
         //Dibuja las letras (rótulos)
         g.setFont(new Font(Font.SERIF, Font.ITALIC, 15));
         g.setColor(Color.BLACK);
         String cliente = "Cartas de '" + usuario + "'";
         String fichas = "Cantidad de Fichas: " + cantFichas;
-        String otro1 = "Cartas del cliente #" + numeroClienteOtro1;
-        String otro2 = "Cartas del cliente #" + numeroClienteOtro2;
-
         
-        g.drawString("Cartas de la casa", 420, 30);
-        g.drawString(cliente, 420, 705);
+        g.drawString("Cartas de la casa", 285, 30);
+        g.drawString(cliente, 285, 398);
 
         g.setColor(Color.BLUE);
         g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-        g.drawString(fichas, 420, 720);
+        g.drawString(fichas, 285, 610);
 
         //Dibuja los numeros de las cartas
         g.setColor(Color.BLACK);
@@ -235,41 +187,16 @@ public class PanelCarta extends JPanel implements Runnable {
 
         //Cartas Casa                   
         for (int i = 0; i < cartasCasa.length; i++) {
-            int posX = 300 + (i * 50);
+            int posX = 165 + (i * 50);
             g.drawImage(imgBack, posX, 50, this);
         }
 
         //Cartas Cliente    
         for (int i = 0; i < cartasCliente.length; i++) {
-            int posX = 300 + (i * 50);
-            g.drawImage(arrayClubs[i], posX, 520, this);
+            int posX = 165 + (i * 50);
+            g.drawImage(arrayClubs[i], posX, 420, this);
         }
 
-        //Cartas Otro1
-        g.setFont(new Font(Font.SERIF, Font.BOLD, 60));
-        for (int i = 0; i < cartasOtro1.length; i++) {
-            int posY = 172 + (i * 48);
-            g.drawImage(imgBack, 138, posY, this);
-        }
-
-        //Cartas Otro2
-        for (int i = 0; i < cartasOtro2.length; i++) {
-            int posY = 172 + (i * 48);
-            g.drawImage(imgBack, 700, posY, this);
-        }
-        
-        Graphics2D g2d = (Graphics2D) g;
-
-//        AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1F);
-//        g2d.setComposite(alpha);
-        
-        g2d.rotate(-Math.PI/2, 100, 100);
-        g2d.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-        g2d.setColor(Color.BLACK);
-        
-        g2d.drawString(otro1, -200, 100);
-        g2d.rotate(-Math.PI, 100, 100);
-        g2d.drawString(otro2, 280, -640);
     }
 
 //    public int lanzarCarta(){      
@@ -288,14 +215,6 @@ public class PanelCarta extends JPanel implements Runnable {
 
         for (int i = 0; i < cartasCliente.length; i++) {
             cartasCliente[i] = "";
-        }
-
-        for (int i = 0; i < cartasOtro1.length; i++) {
-            cartasOtro1[i] = "";
-        }
-
-        for (int i = 0; i < cartasOtro2.length; i++) {
-            cartasOtro2[i] = "";
         }
 
         repaint();
@@ -319,23 +238,6 @@ public class PanelCarta extends JPanel implements Runnable {
         }
     }
 
-    public void agregaCartaOtro1(int a) {
-        for (int i = 0; i < cartasOtro1.length; i++) {
-            if (cartasOtro1[i].equals("")) {
-                cartasOtro1[i] = "" + a;
-                return;
-            }
-        }
-    }
-
-    public void agregaCartaOtro2(int a) {
-        for (int i = 0; i < cartasOtro2.length; i++) {
-            if (cartasOtro2[i].equals("")) {
-                cartasOtro2[i] = "" + a;
-                return;
-            }
-        }
-    }
 
     public void asignaUsuario(String usuario) {
         this.usuario = usuario;
@@ -350,58 +252,14 @@ public class PanelCarta extends JPanel implements Runnable {
         repaint();
     }
 
-//    public void asignaCartaPrimero(int numeroCarta){
-//        switch(numeroCliente){
-//            case 2:
-//                numeroCartaOtro2 = numeroCarta;
-//                break;
-//            case 3:
-//                numeroCartaOtro1 = numeroCarta;
-//                break;
-//        }
-//        repaint();
-//    }
-//    
-//    public void asignaCartaSegundo(int numeroCarta){
-//        switch(numeroCliente){
-//            case 1:
-//                numeroCartaOtro1 = numeroCarta;
-//                break;
-//            case 3:
-//                numeroCartaOtro2 = numeroCarta;
-//                break;
-//        }
-//        repaint();
-//    }
-//    
-//    public void asignaCartaTercero(int numeroCarta){
-//        switch(numeroCliente){
-//            case 1:
-//                numeroCartaOtro2 = numeroCarta;
-//                break;
-//            case 2:
-//                numeroCartaOtro1 = numeroCarta;
-//                break;
-//        }
-//        repaint();
-//    }
     //Atributos
     private Thread hiloPrincipal;
     private final Random rnd;
-
-//    private int numeroCarta;    
-//    private int numeroCartaOtro1;
-//    private int numeroCartaOtro2;
-    private int numeroCliente;
-    private int numeroClienteOtro1;
-    private int numeroClienteOtro2;
     private String usuario;
     private int cantFichas;
 
     private String[] cartasCasa;
     private String[] cartasCliente;
-    private String[] cartasOtro1;
-    private String[] cartasOtro2;
 
     private List<BufferedImage[]> listArray;
     private BufferedImage[] arrayClubs;

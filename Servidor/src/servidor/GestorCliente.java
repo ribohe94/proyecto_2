@@ -39,39 +39,19 @@ public class GestorCliente implements Observer, Runnable {
     
     }
     
-    public void notificarNumeroCliente(){               
-        switch(nCliente){
-            case 1:
-                escribirEntradaCliente("primero");
-                break;
-            case 2:
-                escribirEntradaCliente("segundo");
-                break;
-            case 3:
-                escribirEntradaCliente("tercero");
-                break;
+    public void dibujarCartas(String[] rutas){
+        for(int i = 0; i < rutas.length; i++){
+            escribirEntradaCliente("ruta" + rutas[i]);
         }
     }
     
     public void escribirEntradaCliente(Object e){
         try {
-          salida.writeObject(e);
+          salida.writeObject(e);          
         }
         catch(Exception ex){
             System.err.println(ex.getMessage());
         }        
-    }
-    
-    public int leerCartaCliente(){
-        int num = 0;
-        try {
-              num =  (int)entrada.readObject();                        
-        } catch (ClassNotFoundException ex) {
-                    
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-        return num;
     }
     
     public Jugador leerEntradaCliente(){
@@ -81,7 +61,7 @@ public class GestorCliente implements Observer, Runnable {
         } catch (ClassNotFoundException ex) {
                     
                 } 
-        catch (IOException ex) {
+        catch (IOException ex) {            
             System.err.println(ex.getMessage());
         }
         return j;

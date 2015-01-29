@@ -12,6 +12,7 @@ public class Cliente implements Runnable {
 
     public Cliente(VentanaRegistro ventanaRegistro) {
         this.ventanaRegistro = ventanaRegistro;
+        ventanaCliente = new VentanaCliente();
     }
 
     @Override
@@ -27,7 +28,6 @@ public class Cliente implements Runnable {
             skt = new Socket("localhost", Protocolo.PUERTO_POR_DEFECTO);
             entrada = new ObjectInputStream(skt.getInputStream());
             salida = new ObjectOutputStream(skt.getOutputStream());
-
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
@@ -36,8 +36,9 @@ public class Cliente implements Runnable {
     private void leer() {
         String mensaje = "";
         try {
-            mensaje = entrada.readObject().toString();
-
+            mensaje = entrada.readObject().toString();            
+            System.out.println(mensaje);
+            
             if (mensaje.equals("salida")) {
                 System.exit(0);
             }
@@ -52,13 +53,14 @@ public class Cliente implements Runnable {
                 return;
             }
 
-            if (mensaje.equals("turno")) {
-                System.out.println("Mi turno");
+            if (mensaje.equals("registro")) {
+                System.out.println("Mi turno de registrarme");
                 ventanaRegistro.habilitarBoton();
                 return;
             }
 
-            if (mensaje.equals("lanzar")) {
+            if (mensaje.equals("turno")) {
+                System.out.println("Mi turno");
                 ventanaCliente.iniciar();
                 ventanaCliente.habilitarLanzar();
                 return;
@@ -78,27 +80,30 @@ public class Cliente implements Runnable {
 //                
 //                if(mensaje.equals("tercero")){
 //                    numCliente = 3;
-//                    ventanaCliente = new VentanaCliente(this, numCliente);
+//                    venta try {
+//                int numCliente = Integer.parseInt(mensaje.substring(0, 1));
+//                System.out.println(mensaje);
+//                switch (numCliente) {
+////                        case 1:
+////                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
+////                            break;
+////                        case 2:                
+////                            ventanaCliente.asignaCartaSegundo(Integer.parseInt(mensaje.substring(1)));
+////                            break;
+////                        case 3:
+////                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
+////                            break;
+//                    }
+//            } catch (Exception ex) {
+//                
+//            }naCliente = new VentanaCliente(this, numCliente);
 //                    return;
 //                }
-            try {
-                int numCliente = Integer.parseInt(mensaje.substring(0, 1));
-                System.out.println(mensaje);
-                switch (numCliente) {
-//                        case 1:
-//                            ventanaCliente.asignaCartaPrimero(Integer.parseInt(mensaje.substring(1)));
-//                            break;
-//                        case 2:                
-//                            ventanaCliente.asignaCartaSegundo(Integer.parseInt(mensaje.substring(1)));
-//                            break;
-//                        case 3:
-//                            ventanaCliente.asignaCartaTercero(Integer.parseInt(mensaje.substring(1)));
-//                            break;
-                    }
-            } catch (Exception ex) {
-                System.out.println("Usuario: " + mensaje);
-                ventanaRegistro.mostrarMensaje(mensaje);
+//          
+            if(!mensaje.isEmpty()){
+                System.out.println("Mensaje perdido: " + mensaje);                
             }
+            
 
         } catch (IOException | ClassNotFoundException ex) {
 
@@ -126,7 +131,8 @@ public class Cliente implements Runnable {
     }
 
     public void esconderVentanaRegistro() {
-        ventanaRegistro.setVisible(false);
+        //ventanaRegistro.setVisible(false);
+        ventanaRegistro.ocultarRegistro();
     }
 
     public void reiniciar() {

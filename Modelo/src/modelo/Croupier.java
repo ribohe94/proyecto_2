@@ -10,6 +10,10 @@ public class Croupier {
         this.mazo = mazo;
         manoServidor = new ArrayList();
     }
+    
+    public Croupier(){
+        this(new Mazo());
+    }
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Metodos">

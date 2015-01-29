@@ -20,8 +20,7 @@ import javax.swing.JTextArea;
 
 public class VentanaCliente extends JFrame {
 
-    public VentanaCliente(int numCliente) {
-        this.numCliente = numCliente;
+    public VentanaCliente() {
         ajustarConfiguracionInicial();
         ajustarComponentes(getContentPane());
         ajustarEventos();
@@ -29,18 +28,17 @@ public class VentanaCliente extends JFrame {
 
     private void ajustarConfiguracionInicial() {
         setTitle("Jugador");
-        setSize(900, 900);
+        setSize(700, 700);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setAlwaysOnTop(true);
+        setLocationRelativeTo(null);        
     }
 
     private void ajustarComponentes(Container c) {
         cantFichas = 1000;
         cantFichasApostadas = 0;
         //inicializamos paneles
-        panelCarta = new PanelCarta(numCliente);
+        panelCarta = new PanelCarta();
         panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
         //Botones
         btnPedirCarta = new JButton("Pedir Carta");
@@ -214,7 +212,6 @@ public class VentanaCliente extends JFrame {
     private JComboBox cmbApostar;
 
     private PanelCarta panelCarta;
-    private int numCliente;
     private int cantFichas;
     private int cantFichasApostadas;
 }
