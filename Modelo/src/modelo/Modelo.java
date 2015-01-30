@@ -157,10 +157,44 @@ public class Modelo extends Observable {
     }
     // </editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc=" Metodos Base de Datos">
+    
+    // </editor-fold>
+    public static Modelo obtenerInstancia() {
+        if (instancia == null) {
+            instancia = new Modelo();
+        }
+        return instancia;
+    }
+    
+    public Jugador recuperar() {
+        return BDJugador.recuperar();
+    }
+    
+    public void guardar(Jugador nuevoJugador) throws Exception {
+        BDJugador.guardar(nuevoJugador);
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void actualizar(Jugador actual, Jugador nueva) throws Exception {
+        BDJugador.actualizar(actual, nueva);
+        setChanged();
+        notifyObservers();
+    }
+    
+    public void eliminar(String idPersona) throws Exception {
+        BDJugador.eliminar(idPersona);
+        setChanged();
+        notifyObservers();
+        
+    }
     //<editor-fold defaultstate="collapsed" desc=" Atributos">
     
     private ConjuntoJugador jugadores;
     private Mazo mazo;
     private Croupier croupier;
+    private static Modelo instancia = null;
+    private GestorJugador BDJugador;
     // </editor-fold>
 }

@@ -19,6 +19,11 @@ public class GestorJugador {
     public GestorJugador() {
     }
 
+    public Jugador recuperar() {
+        Jugador resultado = null;
+        return resultado;
+    }
+
     public void guardar(Jugador nuevoJugador) throws Exception {
         Connection cnx = GestorBD.obtenerInstancia().obtenerConexion();
         PreparedStatement stm = cnx.prepareStatement(COMANDO_INSERTAR);
