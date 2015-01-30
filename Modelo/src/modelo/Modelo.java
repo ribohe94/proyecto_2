@@ -18,7 +18,7 @@ public class Modelo extends Observable {
     // Agregando un nuevo Jugador
     public void agregarJugador(Jugador nuevoJugador) {
         jugadores.agregarJugador(nuevoJugador);        
-        registrarCambios("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
+        actualizar("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
     }
     
     //Devuelve un jugador en específico
@@ -31,8 +31,8 @@ public class Modelo extends Observable {
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
     public Carta[] repartirCroupier(){
         Carta[] cartas = croupier.adiquisicionInicial();
-        registrarCambios(2);        //Informa a los clientes la cantidad de cartas que tomó el croupier
-        registrarCambios("El croupier ha tomado sus primeras dos cartas...");
+        actualizar(2);        //Informa a los clientes la cantidad de cartas que tomó el croupier
+        actualizar("El croupier ha tomado sus primeras dos cartas...");
         return cartas;
     }
     
@@ -42,8 +42,8 @@ public class Modelo extends Observable {
     // carta para darsela a cliente y este poder pintarla en la vista
     private Carta agregarCartaCroupier(){
         Carta carta = croupier.agregarCartaCasa();
-        registrarCambios(croupier);
-        registrarCambios("Carta agregada al Croupier...");
+        actualizar(croupier);
+        actualizar("Carta agregada al Croupier...");
         return carta;
     }
     
@@ -51,15 +51,14 @@ public class Modelo extends Observable {
     // devuelve "NO" si el croupier no necesitaba agregar carta
     // para esto se debe hacer una lectura adecuada en el cliente
     // con el metodo equals(), algo asi: if(entrada.equals("NO")) entonces 
-    // no hay ninguna ruta, de lo contrario si la hay y se dibujara en la vista
+    // no hay ninguna carta, de lo contrario si la hay y se dibujara en la vista
     // la nueva carta adquirida por el croupier
-    public Object crupierNecesitaCarta(){
-        String ruta = "NO";        
+    public String crupierNecesitaCarta(){
         if(croupier.necesitoCarta() == true){
             Carta carta = agregarCartaCroupier();
-            return carta;
+            return "SI";
         }else{
-            return ruta;   
+            return "NO";   
         }        
     }
     
@@ -70,7 +69,7 @@ public class Modelo extends Observable {
         Jugador jugador = jugadores.recuperarJugador(pos);
         Carta[] cartas = croupier.repartidaInicial(jugador);
         //registrarCambios(jugador);
-        registrarCambios("Cartas iniciales reapartidas a : "+ jugador.getNombreUsuario()+"...");
+        actualizar("Cartas iniciales reapartidas a : "+ jugador.getNombreUsuario()+"...");
         return cartas;
     }
 
@@ -81,7 +80,7 @@ public class Modelo extends Observable {
         Jugador jugador = jugadores.recuperarJugador(pos);
         Carta carta = croupier.darCarta(jugador);
         //registrarCambios(jugador);
-        registrarCambios("Carta entregada a : " + jugador.getNombreUsuario() + "...");
+        actualizar("Carta entregada a : " + jugador.getNombreUsuario() + "...");
         return carta;
     }
     
@@ -91,24 +90,29 @@ public class Modelo extends Observable {
     public Carta entregaCarta(String usuario) {
         Jugador jugador = jugadores.recuperarJugador(usuario);
         Carta carta = croupier.darCarta(jugador);
-        registrarCambios(jugador.getCartasMano());
-        registrarCambios("Carta entregada a : " + jugador.getNombreUsuario() + "...");
+        actualizar(jugador.getCartasMano());
+        actualizar("Carta entregada a : " + jugador.getNombreUsuario() + "...");
         return carta;
+    }
+    
+    //Comprueba si el croupier aún puede jugar o si perdió
+    public boolean croupierPerdio(){
+        return croupier.sumaCartasActualCasa() > 21;        
     }
 
     // Limpia la mano de un jugador
     public void nuevaMano(int posicion) {
         Jugador jugador = jugadores.recuperarJugador(posicion);
         croupier.nuevasManos(jugador);
-        registrarCambios(jugador);
-        registrarCambios("Jugador : " + jugador.getNombreUsuario() + ", listo para nueva partida...");
+        actualizar(jugador);
+        actualizar("Jugador : " + jugador.getNombreUsuario() + ", listo para nueva partida...");
     }
     
     // Restaura el mazo para empezar nueva partida
     public void restaurarMazo(){
         croupier.reiniciarMazo();
-        registrarCambios(mazo);
-        registrarCambios("Mazo restaurado satisfactoriamente...");
+        actualizar(mazo);
+        actualizar("Mazo restaurado satisfactoriamente...");
     }
 
     // Reduce la cantidad de fichas de un usuario. Osea reduce lo que el jugador aposto
@@ -116,8 +120,8 @@ public class Modelo extends Observable {
     private void restaFichas(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
         croupier.cobrarApuesta(jugador);
-        registrarCambios(jugador);
-        registrarCambios("El jugador : " + jugador.getNombreUsuario() + ", perdio la apuesta de : " + jugador.getApuesta() + "...");
+        actualizar(jugador);
+        actualizar("El jugador : " + jugador.getNombreUsuario() + ", perdio la apuesta de : " + jugador.getApuesta() + "...");
     }
 
     // Aumenta la cantidad de fichas de un usuario. Osea mantiene la apuesta y recibe lo que aposto.
@@ -125,13 +129,18 @@ public class Modelo extends Observable {
     private void aumentaFichas(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
         croupier.pagarApuesta(jugador);
-        registrarCambios(jugador);
-        registrarCambios("El jugador : " + jugador.getNombreUsuario() + ", gano la apuesta de : " + jugador.getApuesta() + "...");
+        actualizar(jugador);
+        actualizar("El jugador : " + jugador.getNombreUsuario() + ", gano la apuesta de : " + jugador.getApuesta() + "...");
     }
 
     // Metodo que verifica quien gana
     // No se notifica porque ya se ha notificado en los metodos que se llaman dentro de este metodo
     public void comparaManos(int pos) {
+        if(croupierPerdio()){
+            aumentaFichas(pos);
+            return;
+        }
+        
         Jugador jugador = jugadores.recuperarJugador(pos);
         boolean quienGana = croupier.comparaManos(jugador);
         if (quienGana == true) {
@@ -142,7 +151,7 @@ public class Modelo extends Observable {
     }
 
     // Registra cambios a Observadores
-    public void registrarCambios(Object evento) {
+    public void actualizar(Object evento) {
         setChanged();
         notifyObservers(evento);
     }

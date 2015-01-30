@@ -12,7 +12,7 @@ public class Jugador implements Serializable {
         this.pass = pass;
         fichas = 1000;
         apuesta = 0;
-        cartasMano = new ArrayList();
+        cartasMano = new ArrayList<>();
         listo = false;
     }
     // </editor-fold>

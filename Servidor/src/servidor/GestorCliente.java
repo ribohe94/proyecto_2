@@ -14,11 +14,9 @@ import modelo.Jugador;
 
 public class GestorCliente implements Observer, Runnable {
 
-    public GestorCliente(Servidor nuevoGestor, Socket skt, int num) {
+    public GestorCliente(Servidor nuevoGestor, Socket skt) {
         gestorPrincipal = nuevoGestor;
-        direccionCliente = skt.getInetAddress();
-        nCliente = num;
-        nEvento = 0;
+        direccionCliente = skt.getInetAddress();                
         salida = null;
         entrada = null;
         this.socket = skt;
@@ -67,7 +65,7 @@ public class GestorCliente implements Observer, Runnable {
         return mensaje;
     }
     
-    public Jugador leerEntradaCliente(){
+    public Jugador leerJugadorCliente(){
         Jugador j = null;
         
         try {
@@ -78,10 +76,10 @@ public class GestorCliente implements Observer, Runnable {
         
         return j;
     } 
-
-    public int getnCliente() {
-        return nCliente;
-    }
+    
+//    public void enviarJugadorCliente(Jugador j){
+//        escribirMensajeCliente(j);
+//    } 
     
     public void cerrarGestorCliente (){
      try {
@@ -97,14 +95,12 @@ public class GestorCliente implements Observer, Runnable {
     @Override
     public String toString() {
         return String.format(
-                "Cliente@ %s", direccionCliente.getHostName(),nCliente);
+                "Cliente@ %s", direccionCliente.getHostName());
     }
     
     private Servidor gestorPrincipal;
     private InetAddress direccionCliente;
     private ObjectOutputStream salida;
     private ObjectInputStream entrada;
-    private Socket socket;
-    private int nCliente;
-    private int nEvento;
+    private Socket socket;       
 }

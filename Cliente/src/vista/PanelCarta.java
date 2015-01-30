@@ -204,20 +204,31 @@ public class PanelCarta extends JPanel implements Runnable {
     
     public int getCantCartasCroupier(){
         return cantCartasCasa;
-    }
+    }       
+    
+//    public void dibujarCartasJugador(Jugador jugador){
+//        cartasJugador.clear();
+//        
+//        ArrayList<Carta> cartas = jugador.getCartasMano();
+//        for(Carta carta : cartas){
+//            agregarCartaUsuario(carta.getTipo(), carta.getValor());
+//        }
+//        
+//        repaint();    
+//    }
 
-    public void agregarCartaUsuario(String palo, int valor){
+    public void agregarCartaUsuario(String palo, int numero){
         if(palo.equals("Bastos")){
-            cartasJugador.add(arraySpades[valor - 1]);
+            cartasJugador.add(arraySpades[numero - 1]);
         }
         if(palo.equals("Corazones")){
-            cartasJugador.add(arrayHearts[valor - 1]);
+            cartasJugador.add(arrayHearts[numero - 1]);
         }
         if(palo.equals("Trebol")){
-            cartasJugador.add(arrayClubs[valor - 1]);
+            cartasJugador.add(arrayClubs[numero - 1]);
         }
         if(palo.equals("Diamantes")){
-            cartasJugador.add(arrayDiamonds[valor - 1]);
+            cartasJugador.add(arrayDiamonds[numero - 1]);
         }
         
         repaint();                    
@@ -243,7 +254,7 @@ public class PanelCarta extends JPanel implements Runnable {
     private int cantFichas;
 
     private ArrayList<BufferedImage> cartasJugador;
-    private int cantCartasCasa;
+    private int cantCartasCasa;        
 
     private List<BufferedImage[]> listArray;
     private BufferedImage[] arrayClubs;

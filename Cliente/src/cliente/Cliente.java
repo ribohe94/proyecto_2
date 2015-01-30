@@ -39,8 +39,19 @@ public class Cliente implements Runnable {
         try {            
             Object objeto = entrada.readObject(); 
             
+//            if(objeto instanceof Jugador){
+//                jugador = (Jugador)objeto;
+//                return;
+//            } 
+            
             if(objeto instanceof Carta){
                 ventanaCliente.agregarCartaUsuario((Carta)objeto);
+                //ventanaCliente.dibujarCartasJugador(jugador);
+                System.out.println(ventanaCliente.getSumaManoJugador());                
+                if(ventanaCliente.getSumaManoJugador() > 20){
+                    ventanaCliente.deshabilitarBotones();
+                    escribirMensajeServidor("quedarse");
+                }
                 return;
             }        
         
@@ -139,7 +150,6 @@ public class Cliente implements Runnable {
 
     private Socket skt;
     private VentanaRegistro ventanaRegistro;
-    private VentanaCliente ventanaCliente;
-    private int numCliente;
+    private VentanaCliente ventanaCliente;    
     private Jugador jugador;
 }

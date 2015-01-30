@@ -16,11 +16,10 @@ public class Carta implements Serializable{
     
     //<editor-fold defaultstate="collapsed" desc=" Metodos">
     
-    public Carta elegirValorDeAs(int sumaCartasActual) {
+    public void elegirValorDeAs(int sumaCartasActual) {
         if (sumaCartasActual > 10) {
             setValor(1);
         }
-        return this;
     }
 
     public String getDIRECCION_CARTA() {

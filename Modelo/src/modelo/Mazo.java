@@ -102,15 +102,14 @@ public class Mazo {
     }
 
     // Devuelve null si ya no hay cartas en el mazo
-    // Tambien elige el valor que debe tomar la carta si esta es un "As" 0 o 11
+    // Tambien elige el valor que debe tomar la carta si esta es un "As" 1 u 11
     public Carta generarCarta(int sumaCartasActual) {
         Carta cartaSeleccionada = null;
         if (mazo.size() > 0) {
             cartaSeleccionada = mazo.get(mazo.size() - 1);
             mazo.remove(mazo.size() - 1);
             if (cartaSeleccionada.getNumero() == 1) {
-                cartaSeleccionada = cartaSeleccionada.elegirValorDeAs(sumaCartasActual);
-                //elegirValorDeAs(cartaSeleccionada, sumaCartasActual);
+                cartaSeleccionada.elegirValorDeAs(sumaCartasActual);                
             }
         }
         return cartaSeleccionada;

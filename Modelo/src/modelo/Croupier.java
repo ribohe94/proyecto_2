@@ -8,7 +8,7 @@ public class Croupier {
     
     public Croupier(Mazo mazo) {
         this.mazo = mazo;
-        manoServidor = new ArrayList();
+        manoServidor = new ArrayList<>();
     }
     
     public Croupier(){

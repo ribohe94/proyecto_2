@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
@@ -23,6 +22,7 @@ public class VentanaCliente extends JFrame {
 
     public VentanaCliente(Cliente cliente) {
         this.cliente = cliente;
+        sumaCartasUsuario = 0;
         ajustarConfiguracionInicial();
         ajustarComponentes(getContentPane());
         ajustarEventos();
@@ -46,7 +46,7 @@ public class VentanaCliente extends JFrame {
         btnPedirCarta = new JButton("Pedir Carta");
         btnPedirCarta.setEnabled(false);
         btnQuedarse = new JButton("Quedarse");
-        btnQuedarse.setEnabled(false);
+        btnQuedarse.setEnabled(true);
         btnApostar = new JButton("Apostar");
         btnApostar.setEnabled(true);
         btnSubirApuesta = new JButton(new ImageIcon("src\\img\\add.png"));
@@ -108,8 +108,7 @@ public class VentanaCliente extends JFrame {
         btnPedirCarta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cliente.escribirMensajeServidor("carta");
-                btnPedirCarta.setEnabled(false);
+                cliente.escribirMensajeServidor("carta");                
             }
         });
 
@@ -117,8 +116,7 @@ public class VentanaCliente extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cliente.escribirMensajeServidor("quedarse");
-                btnQuedarse.setEnabled(false);
-                btnPedirCarta.setEnabled(false);
+                deshabilitarBotones();
             }
         });
 
@@ -129,7 +127,8 @@ public class VentanaCliente extends JFrame {
                 cantFichas = cantFichas - (Integer.parseInt(txtaApuestas.getText()));
                 lbFichasApostadas.setText("Fichas Apostadas: " + (cantFichasApostadas + (Integer.parseInt(txtaApuestas.getText()))));
                 cantFichasApostadas = cantFichasApostadas + (Integer.parseInt(txtaApuestas.getText()));
-                txtaApuestas.setText("0");            
+                txtaApuestas.setText("0");      
+                cliente.escribirMensajeServidor("apostar");
             }
         });
     }
@@ -137,6 +136,12 @@ public class VentanaCliente extends JFrame {
     public void habilitarLanzar() {
         btnPedirCarta.setEnabled(true);
         repaint();
+    }
+    
+    public void deshabilitarBotones(){
+        btnPedirCarta.setEnabled(false);
+        btnQuedarse.setEnabled(false);
+        btnApostar.setEnabled(false);        
     }
 
     public void iniciar() {
@@ -146,14 +151,23 @@ public class VentanaCliente extends JFrame {
     public int getCantFichas() {
         return cantFichas;
     }
+    
+    public int getSumaManoJugador(){
+        return sumaCartasUsuario;
+    }
 
     public void asignaCantFichas(int cantFichas) {
         this.cantFichas = cantFichas;
         panelCarta.setCantFichas(cantFichas);
     }
     
+//    public void dibujarCartasJugador(Jugador jugador){
+//        panelCarta.dibujarCartasJugador(jugador);
+//    }
+    
     public void agregarCartaUsuario(Carta carta){
-        panelCarta.agregarCartaUsuario(carta.getTipo(), carta.getValor());
+        sumaCartasUsuario += carta.getValor();
+        panelCarta.agregarCartaUsuario(carta.getTipo(), carta.getNumero());
     }
     
     public void agregaCartaCroupier(int cant){
@@ -195,4 +209,5 @@ public class VentanaCliente extends JFrame {
     private PanelCarta panelCarta;
     private int cantFichas;
     private int cantFichasApostadas;
+    private int sumaCartasUsuario;
 }
