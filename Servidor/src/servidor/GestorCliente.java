@@ -76,17 +76,13 @@ public class GestorCliente implements Observer, Runnable {
         
         return j;
     } 
-    
-//    public void enviarJugadorCliente(Jugador j){
-//        escribirMensajeCliente(j);
-//    } 
-    
+
     public void cerrarGestorCliente (){
-     try {
-         escribirMensajeCliente("salida");
+     try {         
          salida.close();
          entrada.close();
-         socket.close();         
+         socket.close();        
+         System.out.println("Se ha cerrado el gestorCliente");
      }catch (Exception ex){
         System.err.println(ex.getMessage());
      }

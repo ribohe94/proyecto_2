@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,25 +15,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import modelo.Carta;
 
 public class PanelCarta extends JPanel implements Runnable {
 
     public PanelCarta() {
         ajustarComponentes();        
 
-        cantCartasCasa = 0;
         cartasJugador = new ArrayList<>();
+        cartasCroupier = new ArrayList<>();
 
-//        usuario = "Prueba";
-//        
-//
-//        
-//        cargarPrueba();
-        
+//        cargarPrueba();        
     }
     
     private void cargarPrueba(){
-        cantCartasCasa = 2;
+        usuario = "Prueba";
+        cartasCroupier.add(imgBack);
+        cartasCroupier.add(imgBack);
         usuario = "Prueba";
         
         try {                       
@@ -176,9 +173,9 @@ public class PanelCarta extends JPanel implements Runnable {
         g.drawString(cliente, 285, 398);
 
         //Dibuja Cartas Casa                
-        for (int i = 0; i < cantCartasCasa; i++) {
+        for (int i = 0; i < cartasCroupier.size(); i++) {
             int posX = 165 + (i * 50);
-            g.drawImage(imgBack, posX, 50, this);
+            g.drawImage(cartasCroupier.get(i), posX, 50, this);
         }
 
         //Dibuja Cartas Cliente    
@@ -190,34 +187,49 @@ public class PanelCarta extends JPanel implements Runnable {
         }
     }
     
-    public void reiniciar() {
-        cantCartasCasa = 0;
+    public void reiniciar() {        
+        cantFichas = 0;
         cartasJugador.clear();
+        cartasCroupier.clear();
 
         repaint();
     }
-
-    public void setCantCartasCroupier(int cant){
-        cantCartasCasa = cant;
+    
+    public void agregarCartaCroupier(int cant){
+        //cantCartasCasa += cant;
+        for(int i = 0; i < cant; i++){
+         cartasCroupier.add(imgBack);   
+        } 
         repaint();
     }
-    
-    public int getCantCartasCroupier(){
-        return cantCartasCasa;
-    }       
-    
-//    public void dibujarCartasJugador(Jugador jugador){
-//        cartasJugador.clear();
-//        
-//        ArrayList<Carta> cartas = jugador.getCartasMano();
-//        for(Carta carta : cartas){
-//            agregarCartaUsuario(carta.getTipo(), carta.getValor());
-//        }
-//        
-//        repaint();    
-//    }
 
-    public void agregarCartaUsuario(String palo, int numero){
+    public void cambiarCartasCroupier(Carta[] cartas){
+        cartasCroupier.clear();
+        
+        for(Carta carta : cartas){            
+            dibujarCartaCroupier(carta.getTipo(), carta.getNumero());
+        } 
+        repaint();
+    }
+
+    public void dibujarCartaCroupier(String palo, int numero){                
+        if(palo.equals("Bastos")){
+            cartasCroupier.add(arraySpades[numero - 1]);
+        }
+        if(palo.equals("Corazones")){
+            cartasCroupier.add(arrayHearts[numero - 1]);
+        }
+        if(palo.equals("Trebol")){
+            cartasCroupier.add(arrayClubs[numero - 1]);
+        }
+        if(palo.equals("Diamantes")){
+            cartasCroupier.add(arrayDiamonds[numero - 1]);
+        }
+        
+        repaint();
+    }
+
+    public void dibujaCartaUsuario(String palo, int numero){
         if(palo.equals("Bastos")){
             cartasJugador.add(arraySpades[numero - 1]);
         }
@@ -233,7 +245,6 @@ public class PanelCarta extends JPanel implements Runnable {
         
         repaint();                    
     }
-
 
     public void asignaUsuario(String usuario) {
         this.usuario = usuario;
@@ -254,14 +265,14 @@ public class PanelCarta extends JPanel implements Runnable {
     private int cantFichas;
 
     private ArrayList<BufferedImage> cartasJugador;
-    private int cantCartasCasa;        
+    private ArrayList<BufferedImage> cartasCroupier;
 
     private List<BufferedImage[]> listArray;
     private BufferedImage[] arrayClubs;
     private BufferedImage[] arrayHearts;
     private BufferedImage[] arrayDiamonds;
     private BufferedImage[] arraySpades;
-    private Image imgBack;
+    private BufferedImage imgBack;
 
     private BufferedImage fondo;
 }

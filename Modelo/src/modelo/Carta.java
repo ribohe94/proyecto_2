@@ -19,6 +19,8 @@ public class Carta implements Serializable{
     public void elegirValorDeAs(int sumaCartasActual) {
         if (sumaCartasActual > 10) {
             setValor(1);
+        }else{
+            setValor(11);
         }
     }
 

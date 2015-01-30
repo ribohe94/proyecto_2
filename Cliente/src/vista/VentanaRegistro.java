@@ -99,8 +99,7 @@ public class VentanaRegistro extends JFrame{
                 }
                 
                 Jugador j = new Jugador(nom, pass);
-                cliente.setJugador(j);                              
-                //cliente.asignaUsuario(nom);
+                cliente.setJugador(j);                                              
                 cliente.escribirMensajeServidor(j);
                 
                 txtNomUsuario.setText("");
@@ -162,6 +161,4 @@ public class VentanaRegistro extends JFrame{
     private JLabel lbPass;
     private JTextField txtNomUsuario;
     private JTextField txtPass;
-    
-    private int cantFichas;
 }
