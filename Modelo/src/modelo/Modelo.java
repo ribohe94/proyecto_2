@@ -22,6 +22,11 @@ public class Modelo extends Observable {
         actualizar("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
     }
     
+    //Regresa la cantidad de jugadores
+    public int getCantJugadores(){
+        return jugadores.getCantJugadores();
+    }
+    
     //Devuelve un jugador en específico
     public Jugador devuelveJugador(int p){
         return jugadores.recuperarJugador(p);
@@ -168,6 +173,7 @@ public class Modelo extends Observable {
     //<editor-fold defaultstate="collapsed" desc=" Metodos Base de Datos">
     
     // </editor-fold>
+    
     public static Modelo obtenerInstancia() {
         if (instancia == null) {
             instancia = new Modelo();
@@ -195,8 +201,8 @@ public class Modelo extends Observable {
         BDJugador.eliminar(idPersona);
         setChanged();
         notifyObservers();
-        
     }
+    
     //<editor-fold defaultstate="collapsed" desc=" Atributos">
     
     private ConjuntoJugador jugadores;

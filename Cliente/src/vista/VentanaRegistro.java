@@ -98,7 +98,7 @@ public class VentanaRegistro extends JFrame{
                     return;
                 }
                 
-                Jugador j = new Jugador(nom, pass);
+                Jugador j = new Jugador("4", nom, pass); // cambiar el numero de jugador
                 cliente.setJugador(j);                                              
                 cliente.escribirMensajeServidor(j);
                 

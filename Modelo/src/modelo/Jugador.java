@@ -7,7 +7,8 @@ public class Jugador implements Serializable {
     
     //<editor-fold defaultstate="collapsed" desc=" Constructor">
 
-    public Jugador(String nombreUsuario, String pass) {
+    public Jugador(String id, String nombreUsuario, String pass) {
+        this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.pass = pass;
         fichas = 1000;
@@ -18,6 +19,14 @@ public class Jugador implements Serializable {
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Metodos">
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -28,6 +37,7 @@ public class Jugador implements Serializable {
     }
 
     //Para Verificar coincidencia de password para jugadores previamente registrados
+    
     public String getPass() {
         return pass;
     }
@@ -97,6 +107,7 @@ public class Jugador implements Serializable {
     
     private String nombreUsuario;
     private String pass;
+    private String id;
     private int fichas;
     private int apuesta;
     private ArrayList<Carta> cartasMano;

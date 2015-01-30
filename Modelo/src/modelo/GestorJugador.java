@@ -28,8 +28,9 @@ public class GestorJugador {
         Connection cnx = GestorBD.obtenerInstancia().obtenerConexion();
         PreparedStatement stm = cnx.prepareStatement(COMANDO_INSERTAR);
         stm.clearParameters();
-        stm.setString(1, nuevoJugador.getNombreUsuario());
-        stm.setString(2, nuevoJugador.getPass());
+        stm.setString(1, nuevoJugador.getId());
+        stm.setString(2, nuevoJugador.getNombreUsuario());
+        stm.setString(3, nuevoJugador.getPass());
         if (stm.executeUpdate() != 1) {
             throw new Exception();
         }
@@ -70,7 +71,8 @@ public class GestorJugador {
         ResultSet rs = stm.executeQuery(COMANDO_CONSULTAR);
         while (rs.next()) {
             String jugador = rs.getString("nombre");
-            String pw = rs.getString("contraseña");
+            String pw = rs.getString("contrasena");
+            System.out.println(String.format("%s\t%s", jugador, pw));
         }
         GestorBD.obtenerInstancia().cerrarConexion();
     }
@@ -79,7 +81,7 @@ public class GestorJugador {
     // Comandos SQL
     private static final String COMANDO_INSERTAR
             = "INSERT INTO personas "
-            + "(id, nombre, apellido) "
+            + "(id, nombre, contrasena) "
             + "VALUES(?, ?, ?); ";
     private static final String COMANDO_ELIMINAR
             = "DELETE FROM personas "
