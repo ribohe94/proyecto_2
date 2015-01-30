@@ -42,6 +42,10 @@ public class Croupier {
 
         return valor;
     }
+    
+    public int getCantCartas(){
+        return manoServidor.size();
+    }
 
     //Compara manos entre el servidor (casa) y un usuario
     // Nota: los usuarios no juegan entre "sí", cada usuario juega contra la casa. Independientemente
@@ -128,6 +132,10 @@ public class Croupier {
         mazo.reiniciarMazo();
     }
     
+    public void limpiaMano(){
+        manoServidor.clear();
+    }
+    
     // Como el jugador perdio se le cobra la apuesta
     // y se le reducen las fichas
     public void cobrarApuesta(Jugador jugador){
@@ -139,6 +147,18 @@ public class Croupier {
     public void pagarApuesta(Jugador jugador){
         jugador.setFichas(jugador.getFichas() + jugador.getApuesta());
     }
+    
+    public Carta[] getMano(){
+        Carta[] cartas = new Carta[manoServidor.size()];
+        
+        for(int i = 0; i < manoServidor.size(); i++){
+            cartas[i] = manoServidor.get(i);
+        }
+        
+        return cartas;
+    }
+    
+    
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Atributos">

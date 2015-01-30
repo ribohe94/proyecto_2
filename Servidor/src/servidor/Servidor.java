@@ -45,36 +45,44 @@ public class Servidor {
         try {
             srv = new ServerSocket(Protocolo.PUERTO_POR_DEFECTO);            
         
-            //Registra los 2 primeros clientes y espera 5 segundos para un tercero 
-            //  o inicia automáticamente
+            //Registra los 2 primeros clientes
             primeros2Registros();            
             controlarRegistros(); 
-            datos.actualizar("ocultar");                        
+            datos.actualizar("ocultar");    
             
-            while (true){//Comienza una partida
-                if(cantClientes == 2){
-                    System.out.println("Esperando a un posible tercer jugador...(3 segs)");
-                    tercerRegistro();                    
-                }
-                
-                //Reparte cartas a los jugadores
-                reparteCartas();                
-                
-                //Juega una vez
-                controlaPartida();
-                
-                if(JOptionPane.showConfirmDialog(null, "Desea volver a jugar?","Fin del Juego", JOptionPane.YES_NO_OPTION) != JOptionPane.OK_OPTION){
-                    JOptionPane.showMessageDialog(null, String.format("Gracias por jugar! %nLa aplicación ahora se cerrará..."));                    
-                    cerrarServidor();
-                    System.exit(0);
-                }                
-                datos.actualizar("reiniciar");
-                for(GestorCliente cliente : clientes){
-                    cliente.escribirMensajeCliente("reiniciar");
-                }
-            }
+            //Espera 5 segundos para un tercer cliente o se comienza a jugar automáticamente            
+            jugar();                        
+            
         } catch (IOException | HeadlessException e) {            
             System.err.println(e.getMessage());
+        }
+    }
+    
+    private void jugar(){
+        //Comienza una partida
+        while (true){
+            if(cantClientes == 2){
+                try {
+                    System.out.println("Esperando a un posible tercer jugador...(3 segs)");                    
+                    tercerRegistro();
+                } catch (IOException ex) {}
+            }
+                
+            //Reparte cartas a los jugadores
+            reparteCartas();                
+                
+            //Juega una vez
+            controlaPartida();
+                
+            if(JOptionPane.showConfirmDialog(null, "Desea volver a jugar?","Fin del Juego", JOptionPane.YES_NO_OPTION) != JOptionPane.OK_OPTION){
+                JOptionPane.showMessageDialog(null, String.format("Gracias por jugar! %nLa aplicación ahora se cerrará..."));                    
+                datos.actualizar("salir");
+                cerrarServidor();
+                System.exit(0);
+            }                
+            datos.reiniciar();
+            datos.actualizar("reiniciar");
+            //Fin de una partida
         }
     }
     
@@ -99,12 +107,13 @@ public class Servidor {
             }             
         }
         System.out.println("El mínimo de jugadores es 2");
-        JOptionPane.showMessageDialog(null,"El mínimo de jugadores es 2");               
+        //JOptionPane.showMessageDialog(null,"El mínimo de jugadores es 2");               
     }
     
     private void tercerRegistro() throws IOException{   //Acepta a algún otro cliente que está solicitando ingresar
         try {
             srv.setSoTimeout(3000);
+            datos.actualizar("esperar");
             Socket skt = srv.accept();                        
             cantClientes++;
                     
@@ -145,8 +154,6 @@ public class Servidor {
         //Se le dan 2 cartas a cada jugador y se le envían las cartas a sus clientes para que las dibujen
         for(int i = 0; i < cantClientes; i++){                  
             clientes.get(i).dibujarCartas(datos.repartidaInicial(i));             
-            //datos.repartidaInicial(i);
-            //clientes.get(i).enviarJugadorCliente(datos.devuelveJugador(i));
         }                
     }
     
@@ -154,7 +161,7 @@ public class Servidor {
         switch(cantClientes){
             case 2:
                 iniciaPartidaDe2();
-                return;
+                break;
             case 3:
                 iniciaPartidaDe3();
                 break;
@@ -162,54 +169,9 @@ public class Servidor {
     }    
     
     private void iniciaPartidaDe2(){
-        datos.actualizar("turno");
-        //boolean jugadoresListos = false;
+        datos.actualizar("turno");        
         String solicitud1;
         String solicitud2;
-
-//        //Espera a que los jugadors se "planten"
-//        while(jugadoresListos == false){               
-//            if(!datos.devuelveJugador(0).getListo()){
-//                solicitud1 = clientes.get(0).leerMensajeCliente();
-//            }            
-//            if(!datos.devuelveJugador(1).getListo()){
-//                solicitud2 = clientes.get(1).leerMensajeCliente();
-//            }
-//
-//            //Preguntar si quieren una carta
-//            if(solicitud1.equals("carta")){
-//                clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
-////                datos.entregaCarta(0);
-////                clientes.get(0).enviarJugadorCliente(datos.devuelveJugador(0));
-//            }                    
-//            if(solicitud2.equals("carta")){
-//                clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));   
-////                datos.entregaCarta(1);
-////                clientes.get(1).enviarJugadorCliente(datos.devuelveJugador(1));
-//            }
-//            
-//            //Preguntar si quieren apostar
-//            if(solicitud1.equals("apostar")){
-//                //////////////////////
-//            }                    
-//            if(solicitud2.equals("apostar")){
-//                //////////////////////
-//            }
-//            
-//            //Preguntar si quieren quedarse
-//            if(solicitud1.equals("quedarse")){
-//                datos.devuelveJugador(0).setListo(true);
-//            }                    
-//            if(solicitud2.equals("carta")){
-//                datos.devuelveJugador(1).setListo(true);
-//            }
-//            
-//            solicitud1 = "";
-//            solicitud2 = ""; 
-//        
-//            //Pregunta si ya todos los jugadores están listos            
-//            jugadoresListos = (!datos.devuelveJugador(0).getListo() && !datos.devuelveJugador(1).getListo());   
-//    }
             
             while(!datos.devuelveJugador(0).getListo()){
                 solicitud1 = clientes.get(0).leerMensajeCliente();
@@ -246,9 +208,7 @@ public class Servidor {
             datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
             try {
                 Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-               
-            }
+            } catch (InterruptedException ex) {}
         }
             
         if(datos.croupierPerdio()){
@@ -258,9 +218,9 @@ public class Servidor {
             
         //Compara las manos del Croupier con las de los jugadores y termina la partida
         datos.comparaManos(0);   
-        datos.comparaManos(1);   
+        datos.comparaManos(1);        
         
-        System.out.println("----NOOOO GUEBOOOOON, SE CAGO TODOOOOO");
+        datos.muestraCartasCroupier();
     }
     
     private void iniciaPartidaDe3(){
@@ -338,6 +298,8 @@ public class Servidor {
         datos.comparaManos(0);   
         datos.comparaManos(1);
         datos.comparaManos(2);
+        
+        datos.muestraCartasCroupier();
     }
     
     public void eliminarClientes() {
@@ -354,13 +316,14 @@ public class Servidor {
     }
     
     public void cerrarServidor(){            
-           try{
-               srv.close();
+           try{               
                for(GestorCliente cliente: clientes){
                    if(cliente!=null){
                        cliente.cerrarGestorCliente();
                    }
                 }                
+               srv.close();
+               System.out.println("Se ha cerrado el servidor");
            }
            catch (Exception ex)
            {   

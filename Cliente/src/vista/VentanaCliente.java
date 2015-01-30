@@ -23,6 +23,7 @@ public class VentanaCliente extends JFrame {
     public VentanaCliente(Cliente cliente) {
         this.cliente = cliente;
         sumaCartasUsuario = 0;
+        sumaCartasCroupier = 0;
         ajustarConfiguracionInicial();
         ajustarComponentes(getContentPane());
         ajustarEventos();
@@ -155,35 +156,43 @@ public class VentanaCliente extends JFrame {
     public int getSumaManoJugador(){
         return sumaCartasUsuario;
     }
+    
+    public int getSumaManoCroupier(){
+        return sumaCartasCroupier;
+    }
 
     public void asignaCantFichas(int cantFichas) {
         this.cantFichas = cantFichas;
         panelCarta.setCantFichas(cantFichas);
     }
-    
-//    public void dibujarCartasJugador(Jugador jugador){
-//        panelCarta.dibujarCartasJugador(jugador);
-//    }
-    
-    public void agregarCartaUsuario(Carta carta){
+
+    public void dibujaCartaUsuario(Carta carta){
         sumaCartasUsuario += carta.getValor();
-        panelCarta.agregarCartaUsuario(carta.getTipo(), carta.getNumero());
+        panelCarta.dibujaCartaUsuario(carta.getTipo(), carta.getNumero());
     }
     
-    public void agregaCartaCroupier(int cant){
-        setCantCartasCroupier(getCantCartasCroupier() + cant);
-    }
-    
-    public void setCantCartasCroupier(int cant){
-        panelCarta.setCantCartasCroupier(cant);
-    }
-    
-    public int getCantCartasCroupier(){
-        return panelCarta.getCantCartasCroupier();
+    public void dibujarCartasCroupier(Carta[] cartas){
+        for(Carta carta : cartas){
+            sumaCartasCroupier += carta.getValor();            
+        } 
+        
+        panelCarta.cambiarCartasCroupier(cartas);
     }
 
-    public void reiniciar() {
+    public void agregaCartaCroupier(int cant){
+        panelCarta.agregarCartaCroupier(cant);
+    }
+
+    public void reiniciar() {        
+        sumaCartasUsuario = 0;
+        sumaCartasCroupier = 0;
+        cantFichasApostadas = 0;
+        cantFichas = cliente.getCantFichas();
         panelCarta.reiniciar();        
+        panelCarta.setCantFichas(cantFichas);
+        btnPedirCarta.setEnabled(true);
+        btnQuedarse.setEnabled(true);        
+        btnApostar.setEnabled(true);
     }
 
     public void asignaUsuario(String usuario) {
@@ -205,9 +214,10 @@ public class VentanaCliente extends JFrame {
     private JLabel lbCantFichas;
     private JLabel lbFichasApostadas;   
 
-    private Cliente cliente;
+    private final Cliente cliente;
     private PanelCarta panelCarta;
     private int cantFichas;
     private int cantFichasApostadas;
     private int sumaCartasUsuario;
+    private int sumaCartasCroupier;    
 }
