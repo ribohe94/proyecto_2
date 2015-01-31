@@ -2,45 +2,54 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Modelo extends Observable {
 
     //<editor-fold defaultstate="collapsed" desc=" Constructor">
-    
     public Modelo() {
         jugadores = new ConjuntoJugador();
         mazo = new Mazo();
         croupier = new Croupier(mazo);
+        BDJugador = new GestorJugador();
     }
     // </editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc=" Metodos">
 
+    //<editor-fold defaultstate="collapsed" desc=" Metodos">
     // Agregando un nuevo Jugador
     public void agregarJugador(Jugador nuevoJugador) {
-        jugadores.agregarJugador(nuevoJugador);        
+        jugadores.agregarJugador(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
+        try {
+            BDJugador.guardar(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
+            System.out.println("GUARDA***");
+            BDJugador.consultar();
+            System.out.println("CONSULTA****");
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         actualizar("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
     }
-    
+
     //Regresa la cantidad de jugadores
-    public int getCantJugadores(){
+    public int getCantJugadores() {
         return jugadores.getCantJugadores();
     }
-    
+
     //Devuelve un jugador en específico
-    public Jugador devuelveJugador(int p){
+    public Jugador devuelveJugador(int p) {
         return jugadores.recuperarJugador(p);
     }
-    
+
     // El croupier hace la su adquisicion inicial. Osea obtiene dos cartas del mazo
     // Este metodo devuelve un vector de Cartas donde vendran las dos 
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
-    public Carta[] repartirCroupier(){
+    public Carta[] repartirCroupier() {
         Carta[] cartas = croupier.adiquisicionInicial();
         actualizar(2);        //Informa a los clientes la cantidad de cartas que tomó el croupier
         actualizar("El croupier ha tomado sus primeras dos cartas...");
         return cartas;
-        
+
 //        Carta[] cartasV = croupier.adiquisicionInicial();
 //        ArrayList<Carta> cartas = new ArrayList<>();
 //        
@@ -51,39 +60,39 @@ public class Modelo extends Observable {
 //        cartas.add(cartasV[1]);
 //        return cartas;
     }
-    
+
     // El croupier hace la adquisicion de una carta. 
     // PERO SOLO EN EL ESTRICTO CASO QUE LA NECESITE
     // Este metodo devuelve la que sera la
     // carta para darsela a cliente y este poder pintarla en la vista
-    private Carta agregarCartaCroupier(){
-        Carta carta = croupier.agregarCartaCasa();        
+    private Carta agregarCartaCroupier() {
+        Carta carta = croupier.agregarCartaCasa();
         actualizar("Carta agregada al Croupier...");
         return carta;
     }
-    
+
     // Implementación del metodo agregarCartaCroupier() de esta clase
     // devuelve "NO" si el croupier no necesitaba agregar carta
     // para esto se debe hacer una lectura adecuada en el cliente
     // con el metodo equals(), algo asi: if(entrada.equals("NO")) entonces 
     // no hay ninguna carta, de lo contrario si la hay y se dibujara en la vista
     // la nueva carta adquirida por el croupier
-    public String crupierNecesitaCarta(){
-        if(croupier.necesitoCarta() == true){
+    public String crupierNecesitaCarta() {
+        if (croupier.necesitoCarta() == true) {
             Carta carta = agregarCartaCroupier();
             return "SI";
-        }else{
-            return "NO";   
-        }        
+        } else {
+            return "NO";
+        }
     }
-    
+
     // El croupier hace la repartida inicial. Osea darle dos cartas al jugador
     // Este metodo devuelve un vector de Cartas donde vendran las dos
     // cartas iniciales para darselas a cliente y este poder pintarlas en la vista
-    public Carta[] repartidaInicial(int pos){
+    public Carta[] repartidaInicial(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
-        Carta[] cartas = croupier.repartidaInicial(jugador);        
-        actualizar("Cartas iniciales reapartidas a : "+ jugador.getNombreUsuario()+"...");
+        Carta[] cartas = croupier.repartidaInicial(jugador);
+        actualizar("Cartas iniciales reapartidas a : " + jugador.getNombreUsuario() + "...");
         return cartas;
     }
 
@@ -92,26 +101,26 @@ public class Modelo extends Observable {
     // Devuelve la carta para darsela a cliente y este poder pintarla en la vista
     public Carta entregaCarta(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
-        Carta carta = croupier.darCarta(jugador);        
+        Carta carta = croupier.darCarta(jugador);
         actualizar("Carta entregada a : " + jugador.getNombreUsuario() + "...");
         return carta;
     }
 
     //Comprueba si el croupier aún puede jugar o si perdió
-    public boolean croupierPerdio(){
-        return croupier.sumaCartasActualCasa() > 21;        
+    public boolean croupierPerdio() {
+        return croupier.sumaCartasActualCasa() > 21;
     }
 
     // Limpia la mano de un jugador
     public void nuevaMano(int posicion) {
         Jugador jugador = jugadores.recuperarJugador(posicion);
-        croupier.nuevasManos(jugador);        
+        croupier.nuevasManos(jugador);
         actualizar("Jugador : " + jugador.getNombreUsuario() + ", listo para nueva partida...");
     }
-    
+
     // Restaura el mazo para empezar nueva partida
-    public void restaurarMazo(){
-        croupier.reiniciarMazo();        
+    public void restaurarMazo() {
+        croupier.reiniciarMazo();
         actualizar("Mazo restaurado satisfactoriamente...");
     }
 
@@ -119,7 +128,7 @@ public class Modelo extends Observable {
     // Metodo private porque es solamente usado en el metodo comparaManos(int)
     private void restaFichas(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
-        croupier.cobrarApuesta(jugador);        
+        croupier.cobrarApuesta(jugador);
         actualizar("El jugador : " + jugador.getNombreUsuario() + ", perdio la apuesta de : " + jugador.getApuesta() + "...");
     }
 
@@ -127,33 +136,33 @@ public class Modelo extends Observable {
     // Metodo private porque es solamente usado en el metodo comparaManos(int)
     private void aumentaFichas(int pos) {
         Jugador jugador = jugadores.recuperarJugador(pos);
-        croupier.pagarApuesta(jugador);        
+        croupier.pagarApuesta(jugador);
         actualizar("El jugador : " + jugador.getNombreUsuario() + ", gano la apuesta de : " + jugador.getApuesta() + "...");
     }
 
     // Metodo que verifica quien gana
     // No se notifica porque ya se ha notificado en los metodos que se llaman dentro de este metodo
     public void comparaManos(int pos) {
-        if(croupierPerdio()){
+        if (croupierPerdio()) {
             aumentaFichas(pos);
             return;
         }
-        
+
         Jugador jugador = jugadores.recuperarJugador(pos);
         boolean quienGana = croupier.comparaManos(jugador);
         if (quienGana == true) {
             restaFichas(pos);
-        }else{
+        } else {
             aumentaFichas(pos);
         }
-    }        
-    
-    public void muestraCartasCroupier(){
+    }
+
+    public void muestraCartasCroupier() {
         actualizar(croupier.getMano());
     }
-    
-    public void reiniciar(){
-        for(int i = 0; i < jugadores.getCantJugadores(); i++){
+
+    public void reiniciar() {
+        for (int i = 0; i < jugadores.getCantJugadores(); i++) {
             croupier.nuevasManos(jugadores.recuperarJugador(i));
             croupier.limpiaMano();
             croupier.reiniciarMazo();
@@ -169,42 +178,39 @@ public class Modelo extends Observable {
         notifyObservers(evento);
     }
     // </editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc=" Metodos Base de Datos">
-    
     // </editor-fold>
-    
     public static Modelo obtenerInstancia() {
         if (instancia == null) {
             instancia = new Modelo();
         }
         return instancia;
     }
-    
+
     public Jugador recuperar() {
         return BDJugador.recuperar();
     }
-    
+
     public void guardar(Jugador nuevoJugador) throws Exception {
         BDJugador.guardar(nuevoJugador);
         setChanged();
         notifyObservers();
     }
-    
+
     public void actualizar(Jugador actual, Jugador nueva) throws Exception {
         BDJugador.actualizar(actual, nueva);
         setChanged();
         notifyObservers();
     }
-    
+
     public void eliminar(String idPersona) throws Exception {
         BDJugador.eliminar(idPersona);
         setChanged();
         notifyObservers();
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc=" Atributos">
-    
     private ConjuntoJugador jugadores;
     private Mazo mazo;
     private Croupier croupier;

@@ -142,7 +142,9 @@ public class Servidor {
         Jugador j;
         for(GestorCliente cliente: clientes){
             cliente.escribirMensajeCliente("registro");                 
-            j = cliente.leerJugadorCliente();            
+            j = cliente.leerJugadorCliente(); 
+//            j.setId(String.valueOf(datos.getCantJugadores()+1));
+            j.setId("4");
             datos.agregarJugador(j);
             System.out.println(j);
         }                                      

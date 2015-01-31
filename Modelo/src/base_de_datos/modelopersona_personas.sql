@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `personas`;
 CREATE TABLE `personas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL,
-  `apellido` varchar(45) NOT NULL,
+  `contrasena` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +38,7 @@ CREATE TABLE `personas` (
 
 LOCK TABLES `personas` WRITE;
 /*!40000 ALTER TABLE `personas` DISABLE KEYS */;
-INSERT INTO `personas` VALUES (1,'Juan','Mora'),(2,'Carlos','Solis'),(3,'Jose','Murillo');
+INSERT INTO `personas` VALUES (1,'Juan','123'),(2,'Carlos','123'),(3,'Jose','321');
 /*!40000 ALTER TABLE `personas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

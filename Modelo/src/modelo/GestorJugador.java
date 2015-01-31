@@ -25,6 +25,7 @@ public class GestorJugador {
     }
 
     public void guardar(Jugador nuevoJugador) throws Exception {
+        System.out.println("Nuevo jugador " + nuevoJugador);
         Connection cnx = GestorBD.obtenerInstancia().obtenerConexion();
         PreparedStatement stm = cnx.prepareStatement(COMANDO_INSERTAR);
         stm.clearParameters();
