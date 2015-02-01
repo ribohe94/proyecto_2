@@ -38,7 +38,7 @@ CREATE TABLE `personas` (
 
 LOCK TABLES `personas` WRITE;
 /*!40000 ALTER TABLE `personas` DISABLE KEYS */;
-INSERT INTO `personas` VALUES (1,'Juan','123'),(2,'Carlos','123'),(3,'Jose','321');
+INSERT INTO `personas` VALUES (1,'Juan','123'),(2,'Carlos','123'),(3,'Jose','321'),(4,'Bove','contrasena'),(5,'Will','contrasena'),(6,'Esteban','contrasena');
 /*!40000 ALTER TABLE `personas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

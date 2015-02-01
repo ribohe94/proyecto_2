@@ -18,7 +18,9 @@ public class Servidor {
     public Servidor(Modelo nuevoModelo) {
         datos = nuevoModelo;
         clientes = new ArrayList<>();
-        cantClientes = 0;        
+        cantClientes = 0; 
+        cantJugadores = datos.getCantJugadores();
+//        datos.cargar();
     }
 
     public Servidor() {
@@ -142,9 +144,9 @@ public class Servidor {
         Jugador j;
         for(GestorCliente cliente: clientes){
             cliente.escribirMensajeCliente("registro");                 
-            j = cliente.leerJugadorCliente(); 
-//            j.setId(String.valueOf(datos.getCantJugadores()+1));
-            j.setId("4");
+            j = cliente.leerJugadorCliente();
+            cantJugadores++;
+            j.setId(String.valueOf(cantJugadores));
             datos.agregarJugador(j);
             System.out.println(j);
         }                                      
@@ -339,4 +341,5 @@ public class Servidor {
     private ServerSocket srv;
     private ArrayList<GestorCliente> clientes;
     private int cantClientes;
+    private int cantJugadores;
 }

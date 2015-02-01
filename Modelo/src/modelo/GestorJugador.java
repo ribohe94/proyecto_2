@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -76,6 +78,18 @@ public class GestorJugador {
             System.out.println(String.format("%s\t%s", jugador, pw));
         }
         GestorBD.obtenerInstancia().cerrarConexion();
+    }
+    
+    public List<Jugador> getJugadores() throws Exception{
+        Connection cnx = GestorBD.obtenerInstancia().obtenerConexion();
+        Statement stm = cnx.createStatement();
+        ResultSet rs = stm.executeQuery(COMANDO_CONSULTAR);
+        List<Jugador> listJ = new LinkedList<>();
+        while (rs.next()) {
+            listJ.add(new Jugador(rs.getString("id"), rs.getString("nombre"), rs.getString("contrasena")));
+        }
+        GestorBD.obtenerInstancia().cerrarConexion();
+        return listJ;
     }
 
     //Atributos

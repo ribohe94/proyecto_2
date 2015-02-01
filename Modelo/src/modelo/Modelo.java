@@ -1,9 +1,10 @@
 package modelo;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Modelo extends Observable {
 
@@ -13,22 +14,49 @@ public class Modelo extends Observable {
         mazo = new Mazo();
         croupier = new Croupier(mazo);
         BDJugador = new GestorJugador();
+        cargar();
     }
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Metodos">
-    // Agregando un nuevo Jugador
-    public void agregarJugador(Jugador nuevoJugador) {
-        jugadores.agregarJugador(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
+    // Cargamos jugadores predefinidos
+    public void cargar() {
         try {
-            BDJugador.guardar(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
-            System.out.println("GUARDA***");
-            BDJugador.consultar();
-            System.out.println("CONSULTA****");
+            List<Jugador> listJ = BDJugador.getJugadores();
+            for (int i = 0; i < listJ.size(); i++) {
+                jugadores.agregarJugador(listJ.get(i));
+                System.out.println(jugadores.getJugadores().get(i));
+            }
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        actualizar("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
+    }
+
+    // Agregando un nuevo Jugador
+    public void agregarJugador(Jugador nuevoJugador) {
+        boolean flag = true;
+        for (int i = 0; i < jugadores.getJugadores().size(); i++) {
+            if (nuevoJugador.getNombreUsuario().equals(jugadores.getJugadores().get(i).getNombreUsuario())
+                    && nuevoJugador.getPass().equals(jugadores.getJugadores().get(i).getPass())) {
+                flag = false;
+                System.out.println("Usuario ya registrado******************");
+                JOptionPane.showMessageDialog(null, "Iniciada sesion como " + nuevoJugador.getNombreUsuario(), "Titulo", JOptionPane.INFORMATION_MESSAGE);
+                actualizar("Usuario ya registrado : " + nuevoJugador.getNombreUsuario() + "...");
+                break;
+            }
+        }
+        if (flag) {
+            jugadores.agregarJugador(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
+            try {
+                BDJugador.guardar(new Jugador(nuevoJugador.getId(), nuevoJugador.getNombreUsuario(), nuevoJugador.getPass()));
+                System.out.println("GUARDA****");
+                BDJugador.consultar();
+                System.out.println("CONSULTA****");
+            } catch (Exception ex) {
+                Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            actualizar("Agregando a : " + nuevoJugador.getNombreUsuario() + "...");
+        }
     }
 
     //Regresa la cantidad de jugadores
@@ -179,8 +207,6 @@ public class Modelo extends Observable {
     }
     // </editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc=" Metodos Base de Datos">
-    // </editor-fold>
     public static Modelo obtenerInstancia() {
         if (instancia == null) {
             instancia = new Modelo();
