@@ -67,7 +67,8 @@ public class Servidor {
                 try {
                     System.out.println("Esperando a un posible tercer jugador...(3 segs)");                    
                     tercerRegistro();
-                } catch (IOException ex) {}
+                } catch (IOException ex) {
+                }
             }
                 
             //Reparte cartas a los jugadores
@@ -173,137 +174,321 @@ public class Servidor {
     }    
     
     private void iniciaPartidaDe2(){
-        datos.actualizar("turno");        
+//        datos.actualizar("turno");        
+//        String solicitud1;
+//        String solicitud2;
+//            
+//            while(!datos.devuelveJugador(0).getListo()){
+//                solicitud1 = clientes.get(0).leerMensajeCliente();
+//                if(solicitud1.equals("carta")){
+//                    clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
+//                } 
+//                if(solicitud1.equals("apostar")){
+//                    //////////////////////
+//                }  
+//                if(solicitud1.equals("quedarse")){
+//                    datos.devuelveJugador(0).setListo(true);
+//                }  
+//                
+//                solicitud1 = "";
+//            }
+//            
+//            while(!datos.devuelveJugador(1).getListo()){
+//                solicitud2 = clientes.get(1).leerMensajeCliente();
+//                if(solicitud2.equals("carta")){
+//                    clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));
+//                } 
+//                if(solicitud2.equals("apostar")){
+//                    //////////////////////
+//                }  
+//                if(solicitud2.equals("quedarse")){
+//                    datos.devuelveJugador(1).setListo(true);
+//                }  
+//                
+//                solicitud2 = "";
+//            }                          
+//                                                        
+//        //Comienza el turno del Croupier            
+//        while(datos.crupierNecesitaCarta().equals("SI")){
+//            datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException ex) {}
+//        }
+//            
+//        if(datos.croupierPerdio()){
+//            //Notificar a los usuarios que ellos ganaron
+//            //Revelar las cartas del croupier            
+//        }
+//            
+//        //Compara las manos del Croupier con las de los jugadores y termina la partida
+//        datos.comparaManos(0);   
+//        datos.comparaManos(1);        
+//        
+//        datos.muestraCartasCroupier();
+        
+        // Lo nuevo *******************************************************
+        datos.actualizar("turno");
         String solicitud1;
         String solicitud2;
+        boolean bandera1 = true;
+        boolean bandera2 = true;
+
+        while (!datos.devuelveJugador(0).getListo()) {
             
-            while(!datos.devuelveJugador(0).getListo()){
-                solicitud1 = clientes.get(0).leerMensajeCliente();
-                if(solicitud1.equals("carta")){
-                    clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
-                } 
-                if(solicitud1.equals("apostar")){
-                    //////////////////////
-                }  
-                if(solicitud1.equals("quedarse")){
-                    datos.devuelveJugador(0).setListo(true);
-                }  
-                
-                solicitud1 = "";
+            solicitud1 = clientes.get(0).leerMensajeCliente();
+            String solicitud = solicitud1.substring(0, 5);
+            if (solicitud.equals("carta")) {
+                clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
             }
+
+            if (solicitud.equals("apost")) {
+                String apuesta = solicitud1.substring(7, solicitud1.length());
+                System.out.println("Esto llego:" + apuesta);
+                if (bandera1 == true) {
+                    int ap = Integer.parseInt(apuesta);
+                    datos.setApuesta(ap, 0);
+                    bandera1 = false;
+                }
+            }
+
+            if (solicitud.equals("queda")) {
+                datos.devuelveJugador(0).setListo(true);
+            }
+
+            solicitud1 = "";
+        }
+
+        while (!datos.devuelveJugador(1).getListo()) {
             
-            while(!datos.devuelveJugador(1).getListo()){
-                solicitud2 = clientes.get(1).leerMensajeCliente();
-                if(solicitud2.equals("carta")){
-                    clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));
-                } 
-                if(solicitud2.equals("apostar")){
-                    //////////////////////
-                }  
-                if(solicitud2.equals("quedarse")){
-                    datos.devuelveJugador(1).setListo(true);
-                }  
-                
-                solicitud2 = "";
-            }                          
-                                                        
+            solicitud2 = clientes.get(1).leerMensajeCliente();
+            String solicitud = solicitud2.substring(0, 5);
+            if (solicitud.equals("carta")) {
+                clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));
+            }
+
+            if (solicitud.equals("apost")) {
+                String apuesta = solicitud2.substring(7, solicitud2.length());
+                System.out.println("Esto llego:" + apuesta);
+                if (bandera2 == true) {
+                    int ap = Integer.parseInt(apuesta);
+                    datos.setApuesta(ap, 1);
+                    bandera2 = false;
+                }
+            }
+
+            if (solicitud.equals("queda")) {
+                datos.devuelveJugador(1).setListo(true);
+            }
+
+            solicitud2 = "";
+        }
+
         //Comienza el turno del Croupier            
-        while(datos.crupierNecesitaCarta().equals("SI")){
+        while (datos.crupierNecesitaCarta().equals("SI")) {
             datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
             try {
                 Thread.sleep(2000);
-            } catch (InterruptedException ex) {}
+            } catch (InterruptedException ex) {
+            }
         }
-            
-        if(datos.croupierPerdio()){
+
+        if (datos.croupierPerdio()) {
             //Notificar a los usuarios que ellos ganaron
-            //Revelar las cartas del croupier            
+            //Revelar las cartas del croupier 
         }
-            
+
         //Compara las manos del Croupier con las de los jugadores y termina la partida
-        datos.comparaManos(0);   
-        datos.comparaManos(1);        
-        
+        datos.comparaManos(0);
+        datos.comparaManos(1);
+
         datos.muestraCartasCroupier();
+        // Fin de lo nuevo*************************************************
     }
     
     private void iniciaPartidaDe3(){
+//        datos.actualizar("turno");
+//        boolean jugadoresListos = false;
+//        String solicitud1 = "";
+//        String solicitud2 = "";
+//        String solicitud3  = "";
+//
+//        //Espera a que los jugadors se "planten"
+//        while(jugadoresListos == false){               
+//            if(!datos.devuelveJugador(0).getListo()){
+//                solicitud1 = clientes.get(0).leerMensajeCliente();
+//            }            
+//            if(!datos.devuelveJugador(1).getListo()){
+//                solicitud2 = clientes.get(1).leerMensajeCliente();
+//            }            
+//            if(!datos.devuelveJugador(2).getListo()){
+//                solicitud3 = clientes.get(2).leerMensajeCliente();
+//            }
+//
+//            //Preguntar si quieren una carta
+//            if(solicitud1.equals("carta")){
+//                clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
+//            }                    
+//            if(solicitud2.equals("carta")){
+//                clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));   
+//            }
+//            if(solicitud3.equals("carta")){
+//                clientes.get(2).escribirMensajeCliente(datos.entregaCarta(2));   
+//            }
+//            
+//            //Preguntar si quieren apostar
+//            if(solicitud1.equals("apostar")){
+//                //////////////////////
+//            }                    
+//            if(solicitud2.equals("apostar")){
+//                //////////////////////
+//            }
+//            if(solicitud3.equals("apostar")){
+//                //////////////////////
+//            }
+//            
+//            //Preguntar si quieren plantarse
+//            if(solicitud1.equals("plantarse")){
+//                datos.devuelveJugador(0).setListo(true);
+//            }                    
+//            if(solicitud2.equals("carta")){
+//                datos.devuelveJugador(1).setListo(true);
+//            }
+//            if(solicitud3.equals("carta")){
+//                datos.devuelveJugador(2).setListo(true);
+//            }
+//            
+//            solicitud1 = "";
+//            solicitud2 = ""; 
+//            solicitud3 = ""; 
+//        
+//             //Pregunta si ya todos los jugadores están listos            
+//            jugadoresListos = (!datos.devuelveJugador(0).getListo() && !datos.devuelveJugador(1).getListo() && !datos.devuelveJugador(2).getListo());   
+//        }                        
+//            
+//            
+//            //Comienza el turno del Croupier            
+//        while(datos.crupierNecesitaCarta().equals("SI")){
+//                datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
+//        }
+//            
+//        if(datos.croupierPerdio()){
+//            //Notificar a los usuarios que ellos ganaron
+//            //Revelar las cartas del croupier            
+//        }
+//            
+//        //Compara las manos del Croupier con las de los jugadores y termina la partida
+//        datos.comparaManos(0);   
+//        datos.comparaManos(1);
+//        datos.comparaManos(2);
+//        
+//        datos.muestraCartasCroupier();
+        
+        // Lo nuevo ************************************************************************
         datos.actualizar("turno");
-        boolean jugadoresListos = false;
-        String solicitud1 = "";
-        String solicitud2 = "";
-        String solicitud3  = "";
+        String solicitud1;
+        String solicitud2;
+        String solicitud3;
+        boolean bandera1 = true;
+        boolean bandera2 = true;
+        boolean bandera3 = true;
 
-        //Espera a que los jugadors se "planten"
-        while(jugadoresListos == false){               
-            if(!datos.devuelveJugador(0).getListo()){
-                solicitud1 = clientes.get(0).leerMensajeCliente();
-            }            
-            if(!datos.devuelveJugador(1).getListo()){
-                solicitud2 = clientes.get(1).leerMensajeCliente();
-            }            
-            if(!datos.devuelveJugador(2).getListo()){
-                solicitud3 = clientes.get(2).leerMensajeCliente();
-            }
-
-            //Preguntar si quieren una carta
-            if(solicitud1.equals("carta")){
+        while (!datos.devuelveJugador(0).getListo()) {
+            
+            solicitud1 = clientes.get(0).leerMensajeCliente();
+            String solicitud = solicitud1.substring(0, 5);
+            if (solicitud.equals("carta")) {
                 clientes.get(0).escribirMensajeCliente(datos.entregaCarta(0));
-            }                    
-            if(solicitud2.equals("carta")){
-                clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));   
             }
-            if(solicitud3.equals("carta")){
-                clientes.get(2).escribirMensajeCliente(datos.entregaCarta(2));   
+
+            if (solicitud.equals("apost")) {
+                String apuesta = solicitud1.substring(7, solicitud1.length());
+                System.out.println("Esto llego:" + apuesta);
+                if (bandera1 == true) {
+                    int ap = Integer.parseInt(apuesta);
+                    datos.setApuesta(ap, 0);
+                    bandera1 = false;
+                }
             }
-            
-            //Preguntar si quieren apostar
-            if(solicitud1.equals("apostar")){
-                //////////////////////
-            }                    
-            if(solicitud2.equals("apostar")){
-                //////////////////////
-            }
-            if(solicitud3.equals("apostar")){
-                //////////////////////
-            }
-            
-            //Preguntar si quieren plantarse
-            if(solicitud1.equals("plantarse")){
+
+            if (solicitud.equals("queda")) {
                 datos.devuelveJugador(0).setListo(true);
-            }                    
-            if(solicitud2.equals("carta")){
+            }
+
+            solicitud1 = "";
+        }
+
+        while (!datos.devuelveJugador(1).getListo()) {
+            
+            solicitud2 = clientes.get(1).leerMensajeCliente();
+            String solicitud = solicitud2.substring(0, 5);
+            if (solicitud.equals("carta")) {
+                clientes.get(1).escribirMensajeCliente(datos.entregaCarta(1));
+            }
+
+            if (solicitud.equals("apost")) {
+                String apuesta = solicitud2.substring(7, solicitud2.length());
+                System.out.println("Esto llego:" + apuesta);
+                if (bandera2 == true) {
+                    int ap = Integer.parseInt(apuesta);
+                    datos.setApuesta(ap, 1);
+                    bandera2 = false;
+                }
+            }
+
+            if (solicitud.equals("queda")) {
                 datos.devuelveJugador(1).setListo(true);
             }
-            if(solicitud3.equals("carta")){
+
+            solicitud2 = "";
+        }
+        
+        while (!datos.devuelveJugador(2).getListo()) {
+            
+            solicitud3 = clientes.get(2).leerMensajeCliente();
+            String solicitud = solicitud3.substring(0, 5);
+            if (solicitud.equals("carta")) {
+                clientes.get(2).escribirMensajeCliente(datos.entregaCarta(2));
+            }
+
+            if (solicitud.equals("apost")) {
+                String apuesta = solicitud3.substring(7, solicitud3.length());
+                System.out.println("Esto llego:" + apuesta);
+                if (bandera3 == true) {
+                    int ap = Integer.parseInt(apuesta);
+                    datos.setApuesta(ap, 2);
+                    bandera3 = false;
+                }
+            }
+
+            if (solicitud.equals("queda")) {
                 datos.devuelveJugador(2).setListo(true);
             }
-            
-            solicitud1 = "";
-            solicitud2 = ""; 
-            solicitud3 = ""; 
-        
-             //Pregunta si ya todos los jugadores están listos            
-            jugadoresListos = (!datos.devuelveJugador(0).getListo() && !datos.devuelveJugador(1).getListo() && !datos.devuelveJugador(2).getListo());   
-        }                        
-            
-            
-            //Comienza el turno del Croupier            
-        while(datos.crupierNecesitaCarta().equals("SI")){
-                datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
+
+            solicitud3 = "";
         }
-            
-        if(datos.croupierPerdio()){
+
+        //Comienza el turno del Croupier            
+        while (datos.crupierNecesitaCarta().equals("SI")) {
+            datos.actualizar(1);    //El Croupier tomó una carta más que se dibujará en las vistas
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+            }
+        }
+
+        if (datos.croupierPerdio()) {
             //Notificar a los usuarios que ellos ganaron
-            //Revelar las cartas del croupier            
+            //Revelar las cartas del croupier 
         }
-            
+
         //Compara las manos del Croupier con las de los jugadores y termina la partida
-        datos.comparaManos(0);   
+        datos.comparaManos(0);
         datos.comparaManos(1);
         datos.comparaManos(2);
-        
+
         datos.muestraCartasCroupier();
+        // Fin de lo nuevo ******************************************************************
     }
     
     public void eliminarClientes() {

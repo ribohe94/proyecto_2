@@ -114,6 +114,7 @@ public class VentanaRegistro extends JFrame {
                 txtPass.setText("");
                 btnRegistrar.setEnabled(false);
                 mostrarMensaje("Usuario: " + nom);
+                dispose();
             }
         });
 

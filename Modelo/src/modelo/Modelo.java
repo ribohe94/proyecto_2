@@ -155,17 +155,35 @@ public class Modelo extends Observable {
     // Reduce la cantidad de fichas de un usuario. Osea reduce lo que el jugador aposto
     // Metodo private porque es solamente usado en el metodo comparaManos(int)
     private void restaFichas(int pos) {
+//        Jugador jugador = jugadores.recuperarJugador(pos);
+//        croupier.cobrarApuesta(jugador);
+//        actualizar("El jugador : " + jugador.getNombreUsuario() + ", perdio la apuesta de : " + jugador.getApuesta() + "...");
+        
+        // Lo nuevo*******************************************************************************
         Jugador jugador = jugadores.recuperarJugador(pos);
-        croupier.cobrarApuesta(jugador);
+        croupier.cobrarApuesta(jugador);  
+        actualizar(jugador);
+        System.out.println("Cantidad de fihas ahora de: "+jugador+ ": "+jugador.getFichas());
         actualizar("El jugador : " + jugador.getNombreUsuario() + ", perdio la apuesta de : " + jugador.getApuesta() + "...");
+        actualizar("perdio"+jugador.getFichas());
+        // Fin de lo nuevo *************************************************************************
     }
 
     // Aumenta la cantidad de fichas de un usuario. Osea mantiene la apuesta y recibe lo que aposto.
     // Metodo private porque es solamente usado en el metodo comparaManos(int)
     private void aumentaFichas(int pos) {
+//        Jugador jugador = jugadores.recuperarJugador(pos);
+//        croupier.pagarApuesta(jugador);
+//        actualizar("El jugador : " + jugador.getNombreUsuario() + ", gano la apuesta de : " + jugador.getApuesta() + "...");
+        
+        // Lo nuevo*******************************************************************************
         Jugador jugador = jugadores.recuperarJugador(pos);
-        croupier.pagarApuesta(jugador);
+        croupier.pagarApuesta(jugador);  
+        actualizar(jugador);
+        System.out.println("Cantidad de fihas ahora de: "+jugador+ ": "+jugador.getFichas());
         actualizar("El jugador : " + jugador.getNombreUsuario() + ", gano la apuesta de : " + jugador.getApuesta() + "...");
+        actualizar("gano"+jugador.getFichas());
+        // Fin de lo nuevo *************************************************************************
     }
 
     // Metodo que verifica quien gana
@@ -199,6 +217,13 @@ public class Modelo extends Observable {
 
         restaurarMazo();
     }
+    
+    // Lo nuevo*******************************************************************************
+    public void setApuesta(int apuesta, int pos){
+        jugadores.recuperarJugador(pos).setApuesta(apuesta);
+        actualizar("Apuesta definida...");
+    }
+    // Fin de lo nuevo *************************************************************************
 
     // Registra cambios a Observadores
     public void actualizar(Object evento) {

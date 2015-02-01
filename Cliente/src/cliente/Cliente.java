@@ -38,33 +38,34 @@ public class Cliente implements Runnable {
     }
 
     private void leer() {
-        try {            
-            Object objeto = entrada.readObject(); 
-            
-            if(objeto instanceof Carta[]){
-                ventanaCliente.dibujarCartasCroupier((Carta[])objeto);                
-                System.out.println(ventanaCliente.getSumaManoCroupier());                
-                return;
-            }  
+        try {
+            Object objeto = entrada.readObject();
 
-            if(objeto instanceof Carta){
-                ventanaCliente.dibujaCartaUsuario((Carta)objeto);                
-                System.out.println("Suma de la mano del Jugador" + ventanaCliente.getSumaManoJugador());                
-                if(ventanaCliente.getSumaManoJugador() > 20){
+            if (objeto instanceof Carta[]) {
+                ventanaCliente.dibujarCartasCroupier((Carta[]) objeto);
+                System.out.println(ventanaCliente.getSumaManoCroupier());
+                return;
+            }
+
+            if (objeto instanceof Carta) {
+                ventanaCliente.dibujaCartaUsuario((Carta) objeto);
+                System.out.println("Suma de la mano del Jugador" + ventanaCliente.getSumaManoJugador());
+                if (ventanaCliente.getSumaManoJugador() > 20) {
                     ventanaCliente.deshabilitarBotones();
                     escribirMensajeServidor("quedarse");
                 }
                 return;
-            }                             
-        
+            }
+
             String mensaje = objeto.toString();
-            
-            try{
+
+            try {
                 int cantCartasCroupier = Integer.parseInt(mensaje);
                 ventanaCliente.agregaCartaCroupier(cantCartasCroupier);
                 return;
-            }catch(NumberFormatException ex){}            
-            
+            } catch (NumberFormatException ex) {
+            }
+
             if (mensaje.equals("salir")) {
                 System.out.println("Se ha cerrado el cliente");
                 System.exit(0);
@@ -91,31 +92,52 @@ public class Cliente implements Runnable {
                 ventanaCliente.iniciar();
                 ventanaCliente.habilitarLanzar();
                 return;
-            }                        
+            }
 
-            if (mensaje.equals("esperar")) {               
-                final JOptionPane pane = new JOptionPane(String.format("Esperando a un tercer cliente.%n(Por favor esperar 3 segundos...)"), JOptionPane.INFORMATION_MESSAGE);                
+            if (mensaje.equals("esperar")) {
+                final JOptionPane pane = new JOptionPane(String.format("Esperando a un tercer cliente.%n(Por favor esperar 3 segundos...)"), JOptionPane.INFORMATION_MESSAGE);
                 final JDialog dialog = pane.createDialog(ventanaCliente, "Esperando");
-                
-                new Thread(new Runnable(){
-                    public void run(){
-                        try{
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
                             Thread.sleep(3000);
                             dialog.dispose();
 
-                        }catch ( Throwable th ){}
+                        } catch (Throwable th) {
+                        }
                     }
                 }).start();
                 dialog.setVisible(true);
 
                 return;
-            }  
-            
+            }
+
             //Quitar esto
-            if(!mensaje.isEmpty()){
-                System.out.println("Mensaje perdido: " + mensaje);                
-            }            
-        } catch (IOException | ClassNotFoundException  | ClassCastException ex) {
+            if (!mensaje.isEmpty()) {
+                // NUEVOOOO************************
+                System.out.println(mensaje);
+                if (mensaje.substring(0, 1).equals("p")){
+                    String nuevoMensaje = mensaje.substring(0, 6);
+                    if ("perdio".equals(nuevoMensaje)) {
+                        //jugador.setFichas(Integer.parseInt(mensaje.substring(6, mensaje.length())));
+                        ventanaCliente.setAuxCantFichas(Integer.parseInt(mensaje.substring(6, mensaje.length())));
+                        System.out.println("AHORA CANTFICHAS ES:"+getCantFichas());
+                    }
+                }else{
+                    if (mensaje.substring(0, 1).equals("g")){
+                        String nuevoMensaje2 = mensaje.substring(0, 4);
+                        if ("gano".equals(nuevoMensaje2)) {
+                           //jugador.setFichas(Integer.parseInt(mensaje.substring(4, mensaje.length())));
+                            ventanaCliente.setAuxCantFichas(Integer.parseInt(mensaje.substring(4, mensaje.length())));
+                            System.out.println("AHORA CANTFICHAS ES:"+getCantFichas());
+                        }
+                    }
+                }
+                // FIN DE NUEVO ********************
+                System.out.println("Mensaje perdido: " + mensaje);
+            }
+        } catch (IOException | ClassNotFoundException | ClassCastException ex) {
 
         }
     }
@@ -123,6 +145,7 @@ public class Cliente implements Runnable {
     public void escribirMensajeServidor(Object obj) {
         try {
             salida.writeObject(obj);
+            salida.flush();
         } catch (Exception ex) {
         }
     }
@@ -145,7 +168,7 @@ public class Cliente implements Runnable {
         ventanaCliente.asignaCantFichas(cantFichas);
     }
 
-    public void esconderVentanaRegistro() {        
+    public void esconderVentanaRegistro() {
         ventanaRegistro.ocultarRegistro();
     }
 
@@ -169,6 +192,6 @@ public class Cliente implements Runnable {
 
     private Socket skt;
     private VentanaRegistro ventanaRegistro;
-    private VentanaCliente ventanaCliente;    
+    private VentanaCliente ventanaCliente;
     private Jugador jugador;
 }

@@ -1,4 +1,3 @@
-
 package servidor;
 
 import java.io.IOException;
@@ -16,87 +15,86 @@ public class GestorCliente implements Observer, Runnable {
 
     public GestorCliente(Servidor nuevoGestor, Socket skt) {
         gestorPrincipal = nuevoGestor;
-        direccionCliente = skt.getInetAddress();                
+        direccionCliente = skt.getInetAddress();
         salida = null;
         entrada = null;
         this.socket = skt;
         try {
             salida = new ObjectOutputStream(socket.getOutputStream());
-            entrada  = new ObjectInputStream(socket.getInputStream());
+            entrada = new ObjectInputStream(socket.getInputStream());
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
-        }                
+        }
     }
 
     @Override
-    public void update(Observable m, Object evt) {        
-        escribirMensajeCliente(evt);        
+    public void update(Observable m, Object evt) {
+        escribirMensajeCliente(evt);
     }
-    
+
     @Override
-    public void run() {    
-    
-    }        
-    
-    public void dibujarCartas(Carta[] cartas){
+    public void run() {
+
+    }
+
+    public void dibujarCartas(Carta[] cartas) {
         for (Carta carta : cartas) {
             escribirMensajeCliente(carta);
         }
     }
-    
-    public void escribirMensajeCliente(Object e){
+
+    public void escribirMensajeCliente(Object e) {
         try {
-          salida.writeObject(e);          
-        }
-        catch(Exception ex){
+            salida.writeObject(e);
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
-        }        
-    }
-    
-    public String leerMensajeCliente(){
-        String mensaje = "";
-        
-        try {
-            mensaje = entrada.readObject().toString();                        
-        } catch (ClassNotFoundException | IOException ex) {
-            System.err.println(ex.getMessage());        
         }
-        
+    }
+
+    public String leerMensajeCliente() {
+        String mensaje = "";
+
+        try {
+            mensaje = entrada.readObject().toString();
+        } catch (ClassNotFoundException | IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+
         return mensaje;
     }
-    
-    public Jugador leerJugadorCliente(){
-        Jugador j = null;
-        
-        try {
-              j =  (Jugador)entrada.readObject();                        
-        } catch (ClassNotFoundException | IOException ex) {
-            System.err.println(ex.getMessage());        
-        }
-        
-        return j;
-    } 
 
-    public void cerrarGestorCliente (){
-     try {         
-         salida.close();
-         entrada.close();
-         socket.close();        
-         System.out.println("Se ha cerrado el gestorCliente");
-     }catch (Exception ex){
-        System.err.println(ex.getMessage());
-     }
+    public Jugador leerJugadorCliente() {
+        Jugador j = null;
+
+        try {
+            j = (Jugador) entrada.readObject();
+        } catch (ClassNotFoundException | IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        return j;
     }
-    
+
+    public void cerrarGestorCliente() {
+        try {
+            salida.close();
+            entrada.close();
+            socket.close();
+            System.out.println("Se ha cerrado el gestorCliente");
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
     @Override
     public String toString() {
         return String.format(
                 "Cliente@ %s", direccionCliente.getHostName());
     }
-    
+
     private Servidor gestorPrincipal;
     private InetAddress direccionCliente;
     private ObjectOutputStream salida;
     private ObjectInputStream entrada;
-    private Socket socket;       
+    private Socket socket;
 }
