@@ -68,7 +68,7 @@ public class GestorBD {
     private static String URL = "//localhost:3306/";
     private static String BASE_DATOS = "modelopersona";
     private static String USUARIO = "root";
-    private static String CLAVE = "Belsavis1994";
+    private static String CLAVE = "root";
     private Connection cnx = null;
     String protocolo;
     String url;
